@@ -16,6 +16,7 @@ $(document).ready(function() {
     let shuffledQuestions = [];
     let currentQuestionIndex = 0;
     let userScores = {};
+    let traitChart = null; // To hold the chart instance
     const TRAITS = ["Pace", "Risk", "Interact", "Resource", "Presence", "Social"];
 
     // Fetch data and then initialize
@@ -38,6 +39,9 @@ $(document).ready(function() {
     answerButtons.on('click', 'button', selectAnswer);
 
     function startQuiz() {
+        if (traitChart) {
+            traitChart.destroy();
+        }
         introduction.addClass('hidden');
         resultsContent.addClass('hidden');
         quizContent.removeClass('hidden');
@@ -138,6 +142,57 @@ $(document).ready(function() {
         secondaryList.empty();
         secondaries.forEach(archetype => {
             secondaryList.append(`<li>${archetype.name}</li>`);
+        });
+
+        renderTraitChart(userScores);
+    }
+
+    function renderTraitChart(scores) {
+        const ctx = document.getElementById('trait-chart').getContext('2d');
+        const chartData = {
+            labels: TRAITS,
+            datasets: [{
+                label: 'Your Playstyle Scores',
+                data: TRAITS.map(trait => scores[trait]),
+                backgroundColor: 'rgba(106, 106, 255, 0.2)',
+                borderColor: 'rgba(106, 106, 255, 1)',
+                borderWidth: 2,
+                pointBackgroundColor: 'rgba(106, 106, 255, 1)'
+            }]
+        };
+
+        traitChart = new Chart(ctx, {
+            type: 'radar',
+            data: chartData,
+            options: {
+                scales: {
+                    r: {
+                        angleLines: {
+                            color: '#ddd'
+                        },
+                        grid: {
+                            color: '#ddd'
+                        },
+                        pointLabels: {
+                            font: {
+                                size: 14
+                            },
+                            color: '#333'
+                        },
+                        ticks: {
+                            backdropColor: 'rgba(255, 255, 255, 0.75)',
+                            color: '#555',
+                            stepSize: 5 // Adjust based on expected score ranges
+                        },
+                        suggestedMin: 0
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false // Hiding the legend as it's self-explanatory
+                    }
+                }
+            }
         });
     }
 
