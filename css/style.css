@@ -214,6 +214,33 @@ main {
     padding: 0 5px;
 }
 
+/* Background Image Container */
+#background-image-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+}
+
+#background-image-container.visible {
+    opacity: 1;
+}
+
+/* Make quiz container background transparent on results page */
+body.results-active #quiz-container {
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+}
+
+
 /* Utility Classes */
 .hidden {
     display: none;

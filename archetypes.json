@@ -2,76 +2,91 @@
   {
     "name": "Aggro / Go-Wide",
     "fingerprint": { "Pace": 4, "Risk": 3, "Interact": 1, "Resource": 2, "Presence": 4, "Social": 2 },
-    "description": "You like to win by overwhelming the board with creatures. Your strategy is fast, proactive, and puts immense pressure on your opponents from the very beginning."
+    "description": "You like to win by overwhelming the board with creatures. Your strategy is fast, proactive, and puts immense pressure on your opponents from the very beginning.",
+    "image_url": "https://via.placeholder.com/1280x720.png?text=Aggro+/+Go-Wide"
   },
   {
     "name": "Voltron",
     "fingerprint": { "Pace": 4, "Risk": 3, "Interact": 2, "Resource": 2, "Presence": 5, "Social": 2 },
-    "description": "You prefer to focus all your resources on a single, powerful commander and win through commander damage. Your style is direct, high-impact, and creates a massive, singular threat."
+    "description": "You prefer to focus all your resources on a single, powerful commander and win through commander damage. Your style is direct, high-impact, and creates a massive, singular threat.",
+    "image_url": "https://via.placeholder.com/1280x720.png?text=Voltron"
   },
   {
     "name": "Midrange Value",
     "fingerprint": { "Pace": 3, "Risk": 2, "Interact": 3, "Resource": 3, "Presence": 3, "Social": 3 },
-    "description": "You enjoy a balanced approach, playing resilient threats and generating value over time. You adapt to the flow of the game, ready to be the aggressor or the controller as needed."
+    "description": "You enjoy a balanced approach, playing resilient threats and generating value over time. You adapt to the flow of the game, ready to be the aggressor or the controller as needed.",
+    "image_url": "https://via.placeholder.com/1280x720.png?text=Midrange+Value"
   },
   {
     "name": "Control",
     "fingerprint": { "Pace": 1, "Risk": 1, "Interact": 5, "Resource": 3, "Presence": 2, "Social": 3 },
-    "description": "You are a master of patience, aiming to answer every threat your opponents present. You win the long game by achieving total control over the board and ensuring inevitability."
+    "description": "You are a master of patience, aiming to answer every threat your opponents present. You win the long game by achieving total control over the board and ensuring inevitability.",
+    "image_url": "https://via.placeholder.com/1280x720.png?text=Control"
   },
   {
     "name": "Combo",
     "fingerprint": { "Pace": 2, "Risk": 5, "Interact": 2, "Resource": 4, "Presence": 4, "Social": 2 },
-    "description": "You are drawn to intricate puzzles, assembling specific pieces to win the game in a spectacular, often unexpected, fashion. Your playstyle is high-risk, high-reward, and focuses on your own game plan."
+    "description": "You are drawn to intricate puzzles, assembling specific pieces to win the game in a spectacular, often unexpected, fashion. Your playstyle is high-risk, high-reward, and focuses on your own game plan.",
+    "image_url": "https://via.placeholder.com/1280x720.png?text=Combo"
   },
   {
     "name": "Stax / Prison",
     "fingerprint": { "Pace": 2, "Risk": 2, "Interact": 5, "Resource": 3, "Presence": 4, "Social": 2 },
-    "description": "You believe that the best way to win is to stop your opponents from playing the game. You use resource denial and lockdown effects to create a prison where only you can thrive."
+    "description": "You believe that the best way to win is to stop your opponents from playing the game. You use resource denial and lockdown effects to create a prison where only you can thrive.",
+    "image_url": "https://via.placeholder.com/1280x720.png?text=Stax+/+Prison"
   },
   {
     "name": "Ramp / Big Mana",
     "fingerprint": { "Pace": 3, "Risk": 3, "Interact": 2, "Resource": 5, "Presence": 5, "Social": 2 },
-    "description": "You love to think big, accelerating your mana production to cast enormous, game-ending spells far ahead of schedule. Your strategy is flashy, powerful, and aims to go over the top of everyone else."
+    "description": "You love to think big, accelerating your mana production to cast enormous, game-ending spells far ahead of schedule. Your strategy is flashy, powerful, and aims to go over the top of everyone else.",
+    "image_url": "https://via.placeholder.com/1280x720.png?text=Ramp+/+Big+Mana"
   },
   {
     "name": "Group Hug",
     "fingerprint": { "Pace": 3, "Risk": 3, "Interact": 2, "Resource": 4, "Presence": 4, "Social": 5 },
-    "description": "You want everyone at the table to have a good time... until you win. You help all players, creating a chaotic and friendly environment that you can manipulate to your advantage."
+    "description": "You want everyone at the table to have a good time... until you win. You help all players, creating a chaotic and friendly environment that you can manipulate to your advantage.",
+    "image_url": "https://via.placeholder.com/1280x720.png?text=Group+Hug"
   },
   {
     "name": "Politics / Schemes",
     "fingerprint": { "Pace": 2, "Risk": 3, "Interact": 4, "Resource": 3, "Presence": 3, "Social": 5 },
-    "description": "You play the players, not just the cards. Your strength lies in negotiation, deception, and turning your opponents against each other while you quietly advance your own goals."
+    "description": "You play the players, not just the cards. Your strength lies in negotiation, deception, and turning your opponents against each other while you quietly advance your own goals.",
+    "image_url": "https://via.placeholder.com/1280x720.png?text=Politics+/+Schemes"
   },
   {
     "name": "Chaos",
     "fingerprint": { "Pace": 3, "Risk": 5, "Interact": 3, "Resource": 4, "Presence": 5, "Social": 4 },
-    "description": "You thrive in unpredictability and randomness. You enjoy disrupting game plans (including your own) and creating a wild, memorable experience for everyone involved."
+    "description": "You thrive in unpredictability and randomness. You enjoy disrupting game plans (including your own) and creating a wild, memorable experience for everyone involved.",
+    "image_url": "https://via.placeholder.com/1280x720.png?text=Chaos"
   },
   {
     "name": "Toolbox",
     "fingerprint": { "Pace": 3, "Risk": 2, "Interact": 4, "Resource": 3, "Presence": 2, "Social": 3 },
-    "description": "You value flexibility above all else, running a deck full of answers for any situation. You win by having the right tool for the job at the right time, adapting to any threat."
+    "description": "You value flexibility above all else, running a deck full of answers for any situation. You win by having the right tool for the job at the right time, adapting to any threat.",
+    "image_url": "https://via.placeholder.com/1280x720.png?text=Toolbox"
   },
   {
     "name": "Aristocrats",
     "fingerprint": { "Pace": 3, "Risk": 3, "Interact": 3, "Resource": 3, "Presence": 3, "Social": 3 },
-    "description": "You see your creatures as resources to be sacrificed for value. You win by creating engines that drain your opponents' life totals through a continuous cycle of death and recursion."
+    "description": "You see your creatures as resources to be sacrificed for value. You win by creating engines that drain your opponents' life totals through a continuous cycle of death and recursion.",
+    "image_url": "https://via.placeholder.com/1280x720.png?text=Aristocrats"
   },
   {
     "name": "Spellslinger",
     "fingerprint": { "Pace": 2, "Risk": 4, "Interact": 4, "Resource": 4, "Presence": 4, "Social": 2 },
-    "description": "You love casting instants and sorceries, chaining them together to create powerful effects or build towards a decisive 'storm' turn. Your deck is a flurry of action and interaction."
+    "description": "You love casting instants and sorceries, chaining them together to create powerful effects or build towards a decisive 'storm' turn. Your deck is a flurry of action and interaction.",
+    "image_url": "https://via.placeholder.com/1280x720.png?text=Spellslinger"
   },
   {
     "name": "Reanimator / Graveyard",
     "fingerprint": { "Pace": 3, "Risk": 3, "Interact": 3, "Resource": 4, "Presence": 4, "Social": 2 },
-    "description": "You see the graveyard as a second hand. You cheat massive threats into play from your graveyard, using recursion and powerful synergies to out-value your opponents."
+    "description": "You see the graveyard as a second hand. You cheat massive threats into play from your graveyard, using recursion and powerful synergies to out-value your opponents.",
+    "image_url": "https://via.placeholder.com/1280x720.png?text=Reanimator+/+Graveyard"
   },
   {
     "name": "Pillowfort",
     "fingerprint": { "Pace": 2, "Risk": 2, "Interact": 4, "Resource": 3, "Presence": 2, "Social": 4 },
-    "description": "You build a fortress of enchantments and artifacts that make you an unattractive target. You prefer to win by deflecting aggression and achieving an alternate, often non-combat, win condition."
+    "description": "You build a fortress of enchantments and artifacts that make you an unattractive target. You prefer to win by deflecting aggression and achieving an alternate, often non-combat, win condition.",
+    "image_url": "https://via.placeholder.com/1280x720.png?text=Pillowfort"
   }
 ]
