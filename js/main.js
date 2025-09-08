@@ -215,14 +215,23 @@ $(document).ready(function() {
 
         TRAITS.forEach(trait => {
             const score = normalizedScores[trait];
-            // Position is 0% for score 1, 100% for score 5
             const positionPercent = (score - 1) / 4 * 100;
             const labels = TRAIT_LABELS[trait];
+
+            let trailLeft, trailWidth;
+            if (positionPercent >= 50) {
+                trailLeft = 50;
+                trailWidth = positionPercent - 50;
+            } else {
+                trailLeft = positionPercent;
+                trailWidth = 50 - positionPercent;
+            }
 
             const barHtml = `
                 <div class="trait-bar-row">
                     <h4>${trait}</h4>
                     <div class="bar-track">
+                        <div class="bar-trail" style="left: ${trailLeft}%; width: ${trailWidth}%;"></div>
                         <div class="bar-indicator" style="left: ${positionPercent}%;"></div>
                     </div>
                     <div class="bar-labels">
