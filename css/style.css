@@ -49,7 +49,7 @@ main {
 }
 
 /* Buttons */
-.btn, #start-btn, #restart-btn {
+.btn, #start-btn, #restart-btn, #share-btn {
     background-color: #6a6aff;
     color: white;
     border: none;
@@ -67,7 +67,7 @@ main {
     background-color: #5a5ae0;
 }
 
-#start-btn, #restart-btn {
+#start-btn, #restart-btn, #share-btn {
     max-width: 200px; /* Give start/restart buttons a max width */
 }
 
