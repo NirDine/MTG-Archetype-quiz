@@ -3,7 +3,6 @@ $(document).ready(function() {
     const introduction = $('#introduction');
     const quizContent = $('#quiz-content');
     const resultsContent = $('#results');
-    const backgroundImageContainer = $('#background-image-container');
     const startBtn = $('#start-btn');
     const restartBtn = $('#restart-btn');
     const shareBtn = $('#share-btn');
@@ -55,10 +54,6 @@ $(document).ready(function() {
         if (traitChart) {
             traitChart.destroy();
         }
-
-        // Hide background
-        $('body').removeClass('results-active');
-        backgroundImageContainer.removeClass('visible');
 
         introduction.addClass('hidden');
         resultsContent.addClass('hidden');
@@ -115,9 +110,6 @@ $(document).ready(function() {
         quizContent.addClass('hidden');
         resultsContent.removeClass('hidden');
 
-        // Expose for testing
-        window.userScores = userScores;
-
         const sortedResults = calculateResults();
         displayResults(sortedResults);
     }
@@ -154,15 +146,7 @@ $(document).ready(function() {
         }
 
         const primary = sortedResults[0];
-        const primaryArchetypeData = archetypes.find(a => a.name === primary.name);
-
         const secondaries = sortedResults.slice(1, 4);
-
-        if (primaryArchetypeData && primaryArchetypeData.image_url) {
-            backgroundImageContainer.css('background-image', `url(${primaryArchetypeData.image_url})`);
-            backgroundImageContainer.addClass('visible');
-            $('body').addClass('results-active');
-        }
 
         $('#primary-name').text(primary.name);
         $('#primary-description').text(primary.description);
