@@ -5,6 +5,7 @@ $(document).ready(function() {
     const resultsContent = $('#results');
     const startBtn = $('#start-btn');
     const restartBtn = $('#restart-btn');
+    const shareBtn = $('#share-btn');
     const questionText = $('#question-text');
     const answerButtons = $('#answer-buttons');
     const progressText = $('#progress-text');
@@ -46,6 +47,7 @@ $(document).ready(function() {
     // Event Listeners
     startBtn.on('click', startQuiz);
     restartBtn.on('click', startQuiz); // Restart quiz functionality
+    shareBtn.on('click', shareResults);
     answerButtons.on('click', 'button', selectAnswer);
 
     function startQuiz() {
@@ -106,6 +108,9 @@ $(document).ready(function() {
     function endQuiz() {
         quizContent.addClass('hidden');
         resultsContent.removeClass('hidden');
+
+        // Expose for testing
+        window.userScores = userScores;
 
         const sortedResults = calculateResults();
         displayResults(sortedResults);
@@ -293,6 +298,74 @@ $(document).ready(function() {
         return array;
     }
 
+    function shareResults() {
+        const data = btoa(JSON.stringify(userScores));
+        const url = window.location.origin + window.location.pathname + '#/results/' + data;
+
+        navigator.clipboard.writeText(url).then(() => {
+            const originalText = shareBtn.text();
+            shareBtn.text('Copied!');
+            setTimeout(() => {
+                shareBtn.text(originalText);
+            }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy URL: ', err);
+            alert('Failed to copy URL. Please copy it manually:\n' + url);
+        });
+    }
+
+    function checkForSharedResults() {
+        const hash = window.location.hash;
+        if (hash && hash.startsWith('#/results/')) {
+            const data = hash.substring('#/results/'.length);
+            try {
+                const decodedScores = atob(data);
+                userScores = JSON.parse(decodedScores);
+
+                // We need to make sure archetype data is loaded before calculating
+                if (archetypes.length > 0) {
+                    displayResultsFromScores();
+                } else {
+                    // If archetypes aren't loaded yet, wait for them.
+                    // This relies on the initial $.when call
+                    $.when($.getJSON('archetypes.json')).done(function(archetypesData) {
+                        archetypes = archetypesData;
+                        displayResultsFromScores();
+                    });
+                }
+            } catch (e) {
+                console.error("Failed to parse shared results data:", e);
+                // Hide all content and show an error message
+                introduction.addClass('hidden');
+                quizContent.addClass('hidden');
+                resultsContent.addClass('hidden');
+                $('body').prepend('<div style="text-align: center; padding: 20px;"><h2>Invalid Share Link</h2><p>The link you followed seems to be broken. Please check the URL and try again.</p><a href="/">Go to Quiz</a></div>');
+            }
+        }
+    }
+
+    function displayResultsFromScores() {
+        // Ensure max scores are calculated if they haven't been
+        if (Object.keys(maxPossibleScores).length === 0) {
+            maxPossibleScores = calculateMaxScores(questions);
+        }
+
+        if (traitChart) {
+            traitChart.destroy();
+        }
+
+        const sortedResults = calculateResults();
+        displayResults(sortedResults);
+
+        // Show results and hide other sections
+        introduction.addClass('hidden');
+        quizContent.addClass('hidden');
+        resultsContent.removeClass('hidden');
+    }
+
     // Initially disable start button until data is loaded
     startBtn.prop('disabled', true).text('Loading...');
+
+    // Check for shared results on page load
+    checkForSharedResults();
 });
