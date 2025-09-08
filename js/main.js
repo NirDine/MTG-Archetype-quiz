@@ -298,8 +298,27 @@ $(document).ready(function() {
         return array;
     }
 
+    function encodeScores(scores) {
+        // Assuming scores for each trait will be less than 100.
+        // Pad with leading zero if needed to make each score 2 digits.
+        return TRAITS.map(trait => String(scores[trait]).padStart(2, '0')).join('');
+    }
+
+    function decodeScores(encodedString) {
+        const decodedScores = {};
+        if (encodedString.length !== TRAITS.length * 2) {
+            throw new Error("Invalid encoded string length.");
+        }
+        for (let i = 0; i < TRAITS.length; i++) {
+            const trait = TRAITS[i];
+            const scoreStr = encodedString.substring(i * 2, (i * 2) + 2);
+            decodedScores[trait] = parseInt(scoreStr, 10);
+        }
+        return decodedScores;
+    }
+
     function shareResults() {
-        const data = btoa(JSON.stringify(userScores));
+        const data = encodeScores(userScores);
         const url = window.location.origin + window.location.pathname + '#/results/' + data;
 
         navigator.clipboard.writeText(url).then(() => {
@@ -319,8 +338,7 @@ $(document).ready(function() {
         if (hash && hash.startsWith('#/results/')) {
             const data = hash.substring('#/results/'.length);
             try {
-                const decodedScores = atob(data);
-                userScores = JSON.parse(decodedScores);
+                userScores = decodeScores(data);
 
                 // We need to make sure archetype data is loaded before calculating
                 if (archetypes.length > 0) {
