@@ -19,6 +19,14 @@ $(document).ready(function() {
     let traitChart = null; // To hold the chart instance
     let maxPossibleScores = {}; // To hold max scores for normalization
     const TRAITS = ["Pace", "Risk", "Interact", "Resource", "Presence", "Social"];
+    const TRAIT_LABELS = {
+        Pace: { left: 'Fast', right: 'Slow' },
+        Risk: { left: 'Safe', right: 'Swingy' },
+        Interact: { left: 'Proactive', right: 'Reactive' },
+        Resource: { left: 'Efficient', right: 'Greedy' },
+        Presence: { left: 'Subtle', right: 'Flashy' },
+        Social: { left: 'Independent', right: 'Diplomatic' }
+    };
 
     // Fetch data and then initialize
     $.when(
@@ -146,11 +154,12 @@ $(document).ready(function() {
             secondaryList.append(`<li>${archetype.name}</li>`);
         });
 
-        renderTraitChart(userScores);
+        const normalizedPlayerScores = normalizeScores(userScores, maxPossibleScores);
+        renderTraitChart(normalizedPlayerScores);
+        renderTraitBars(normalizedPlayerScores);
     }
 
-    function renderTraitChart(scores) {
-        const normalizedScores = normalizeScores(scores, maxPossibleScores);
+    function renderTraitChart(normalizedScores) {
         const ctx = document.getElementById('trait-chart').getContext('2d');
         const chartData = {
             labels: TRAITS,
@@ -197,6 +206,32 @@ $(document).ready(function() {
                     }
                 }
             }
+        });
+    }
+
+    function renderTraitBars(normalizedScores) {
+        const container = $('#trait-bars-container');
+        container.find('.trait-bar-row').remove(); // Clear previous bars
+
+        TRAITS.forEach(trait => {
+            const score = normalizedScores[trait];
+            // Position is 0% for score 1, 100% for score 5
+            const positionPercent = (score - 1) / 4 * 100;
+            const labels = TRAIT_LABELS[trait];
+
+            const barHtml = `
+                <div class="trait-bar-row">
+                    <h4>${trait}</h4>
+                    <div class="bar-track">
+                        <div class="bar-indicator" style="left: ${positionPercent}%;"></div>
+                    </div>
+                    <div class="bar-labels">
+                        <span class="label-left">${labels.left}</span>
+                        <span class="label-right">${labels.right}</span>
+                    </div>
+                </div>
+            `;
+            container.append(barHtml);
         });
     }
 

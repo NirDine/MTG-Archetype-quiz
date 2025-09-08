@@ -150,6 +150,54 @@ main {
     margin-left: 8px;
 }
 
+/* Trait Bar Styles */
+#trait-bars-container h3 {
+    font-size: 1.2em;
+    color: #4a4a8a;
+    margin-bottom: 20px;
+}
+
+.trait-bar-row {
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+.trait-bar-row h4 {
+    margin-bottom: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
+    text-align: center;
+}
+
+.bar-track {
+    position: relative;
+    background-color: #e9e9f3;
+    height: 8px;
+    border-radius: 4px;
+}
+
+.bar-indicator {
+    position: absolute;
+    top: 50%;
+    width: 18px;
+    height: 18px;
+    background-color: #4a4a8a;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    border-radius: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    transition: left 0.5s ease-out;
+}
+
+.bar-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    font-size: 0.85em;
+    color: #555;
+    padding: 0 5px;
+}
+
 /* Utility Classes */
 .hidden {
     display: none;
