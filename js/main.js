@@ -215,16 +215,11 @@ $(document).ready(function() {
                 scales: {
                     r: {
                         angleLines: {
-                            display: false
+                            display: true,
+                            color: '#ddd'
                         },
                         grid: {
-                            color: function(context) {
-                                // Only display the outermost grid line
-                                if (context.tick.value === 5) {
-                                    return '#ddd'; // A light grey color for the outline
-                                }
-                                return 'transparent';
-                            }
+                            color: '#ddd'
                         },
                         pointLabels: {
                             font: {
@@ -236,7 +231,7 @@ $(document).ready(function() {
                             display: false,
                             min: 1,
                             max: 5,
-                            stepSize: 1
+                            stepSize: 4 // Creates grid lines at 1 and 5
                         }
                     }
                 },
