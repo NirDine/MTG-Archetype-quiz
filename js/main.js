@@ -103,45 +103,27 @@ $(document).ready(function() {
         displayResults(sortedResults);
     }
 
-    function cosineSimilarity(vecA, vecB) {
-        let dotProduct = 0;
-        let magnitudeA = 0;
-        let magnitudeB = 0;
-
-        for (let i = 0; i < vecA.length; i++) {
-            dotProduct += vecA[i] * vecB[i];
-            magnitudeA += vecA[i] * vecA[i];
-            magnitudeB += vecB[i] * vecB[i];
-        }
-
-        magnitudeA = Math.sqrt(magnitudeA);
-        magnitudeB = Math.sqrt(magnitudeB);
-
-        if (magnitudeA === 0 || magnitudeB === 0) {
-            return 0; // Avoid division by zero
-        }
-
-        return dotProduct / (magnitudeA * magnitudeB);
-    }
-
     function calculateResults() {
         const normalizedPlayerScores = normalizeScores(userScores, maxPossibleScores);
-        const playerVector = TRAITS.map(trait => normalizedPlayerScores[trait]);
 
         const results = archetypes.map(archetype => {
-            const archetypeVector = TRAITS.map(trait => archetype.fingerprint[trait]);
-            const similarity = cosineSimilarity(playerVector, archetypeVector);
+            let sumOfSquares = 0;
+            TRAITS.forEach(trait => {
+                const playerTraitScore = normalizedPlayerScores[trait];
+                const archetypeTraitScore = archetype.fingerprint[trait];
+                sumOfSquares += Math.pow(playerTraitScore - archetypeTraitScore, 2);
+            });
+            const distance = Math.sqrt(sumOfSquares);
 
             return {
                 name: archetype.name,
-                // Convert similarity to percentage for easier handling later
-                score: similarity,
+                score: distance, // Score is now distance
                 description: archetype.description
             };
         });
 
-        // Sort by score (similarity) in descending order
-        results.sort((a, b) => b.score - a.score);
+        // Sort by score (distance) in ascending order (lower is better)
+        results.sort((a, b) => a.score - b.score);
         return results;
     }
 
@@ -152,43 +134,17 @@ $(document).ready(function() {
             return;
         }
 
-        const topScore = sortedResults[0].score;
-        // Check if the second score is at least 95% of the top score
-        const isTie = sortedResults.length > 1 && (sortedResults[1].score / topScore) >= 0.95;
+        const primary = sortedResults[0];
+        const secondaries = sortedResults.slice(1, 4);
 
-        const primaryNameEl = $('#primary-name');
-        const primaryDescriptionEl = $('#primary-description');
+        $('#primary-name').text(primary.name);
+        $('#primary-description').text(primary.description);
+
         const secondaryList = $('#secondary-list');
         secondaryList.empty();
-
-        if (isTie) {
-            const primary1 = sortedResults[0];
-            const primary2 = sortedResults[1];
-            // If there's a tie, the "secondary" list starts from the 3rd result
-            const secondaries = sortedResults.slice(2, 4);
-
-            primaryNameEl.html(`${primary1.name} & ${primary2.name}`);
-            primaryDescriptionEl.text("You have a hybrid playstyle, sharing traits from two distinct archetypes. You enjoy blending strategies and can adapt your approach depending on the game.");
-
-            // Show scores for the tied primary archetypes in the description or name
-            const tieDescription = `Your top matches are ${primary1.name} (${(primary1.score * 100).toFixed(0)}%) and ${primary2.name} (${(primary2.score * 100).toFixed(0)}%).`;
-            primaryDescriptionEl.append(`<br><br><em>${tieDescription}</em>`);
-
-            secondaries.forEach(archetype => {
-                secondaryList.append(`<li>${archetype.name} <span class="score">(${(archetype.score * 100).toFixed(0)}%)</span></li>`);
-            });
-
-        } else {
-            const primary = sortedResults[0];
-            const secondaries = sortedResults.slice(1, 4);
-
-            primaryNameEl.html(`${primary.name} <span class="score">(${(primary.score * 100).toFixed(0)}%)</span>`);
-            primaryDescriptionEl.text(primary.description);
-
-            secondaries.forEach(archetype => {
-                secondaryList.append(`<li>${archetype.name} <span class="score">(${(archetype.score * 100).toFixed(0)}%)</span></li>`);
-            });
-        }
+        secondaries.forEach(archetype => {
+            secondaryList.append(`<li>${archetype.name}</li>`);
+        });
 
         renderTraitChart(userScores);
     }
