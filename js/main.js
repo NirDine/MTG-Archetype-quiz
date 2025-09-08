@@ -226,6 +226,7 @@ $(document).ready(function() {
             const barHtml = `
                 <div class="trait-bar-row">
                     <h4>${trait}</h4>
+                    <p class="trait-description">${labels.description}</p>
                     <div class="bar-track">
                         <div class="bar-trail" style="left: ${trailLeft}%; width: ${trailWidth}%;"></div>
                         <div class="bar-indicator" style="left: ${positionPercent}%;"></div>

@@ -1,8 +1,32 @@
 {
-    "Pace": { "left": "Slow", "right": "Fast" },
-    "Risk": { "left": "Safe", "right": "Swingy" },
-    "Interact": { "left": "Proactive", "right": "Reactive" },
-    "Resource": { "left": "Efficient", "right": "Greedy" },
-    "Presence": { "left": "Subtle", "right": "Flashy" },
-    "Social": { "left": "Independent", "right": "Diplomatic" }
+    "Pace": {
+        "left": "Slow",
+        "right": "Fast",
+        "description": "Determines the speed of your strategy, from slow and deliberate to fast and aggressive."
+    },
+    "Risk": {
+        "left": "Safe",
+        "right": "Swingy",
+        "description": "Reflects your comfort with high-risk, high-reward plays versus safe and consistent ones."
+    },
+    "Interact": {
+        "left": "Proactive",
+        "right": "Reactive",
+        "description": "Measures how much you engage with your opponents' game plans, either proactively or reactively."
+    },
+    "Resource": {
+        "left": "Efficient",
+        "right": "Greedy",
+        "description": "Indicates your focus on mana efficiency and card advantage."
+    },
+    "Presence": {
+        "left": "Subtle",
+        "right": "Flashy",
+        "description": "Describes the visibility and impact of your threats on the board."
+    },
+    "Social": {
+        "left": "Independent",
+        "right": "Diplomatic",
+        "description": "Shows how much you rely on diplomacy and table politics."
+    }
 }
