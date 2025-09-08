@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTG Commander Archetype Quiz</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div id="quiz-container">
+        <header>
+            <h1>MTG Commander Archetype Quiz</h1>
+        </header>
+
+        <main>
+            <div id="introduction">
+                <h2>Discover Your Commander Playstyle</h2>
+                <p>This quiz will help you find the Magic: The Gathering Commander archetype that best matches your preferences.</p>
+                <button id="start-btn">Start Quiz</button>
+            </div>
+
+            <div id="quiz-content" class="hidden">
+                <div id="progress-container">
+                    <p id="progress-text">Question 1/X</p>
+                    <div id="progress-bar-full">
+                        <div id="progress-bar-inner"></div>
+                    </div>
+                </div>
+                <h2 id="question-text"></h2>
+                <div id="answer-buttons">
+                    <!-- Answer buttons will be dynamically generated here -->
+                </div>
+            </div>
+
+            <div id="results" class="hidden">
+                <h2>Your Results</h2>
+                <div id="primary-archetype">
+                    <h3>Your Primary Archetype is:</h3>
+                    <strong id="primary-name"></strong>
+                    <p id="primary-description"></p>
+                </div>
+                <div id="secondary-archetypes">
+                    <h3>Close Runner-Ups:</h3>
+                    <ul id="secondary-list">
+                        <!-- Secondary archetypes will be listed here -->
+                    </ul>
+                </div>
+                <button id="restart-btn">Take the Quiz Again</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

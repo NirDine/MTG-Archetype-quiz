@@ -1,0 +1,107 @@
+[
+  {
+    "question": "The game is in the early stages. What's your ideal opening play?",
+    "answers": [
+      {
+        "text": "Play a mana accelerator to get ahead on resources.",
+        "scores": { "Pace": 2, "Resource": 2, "Interact": 1, "Risk": 2, "Presence": 2, "Social": 2 }
+      },
+      {
+        "text": "Play a small, efficient creature to start chipping away at life totals.",
+        "scores": { "Pace": 1, "Resource": 1, "Interact": 2, "Risk": 2, "Presence": 3, "Social": 2 }
+      },
+      {
+        "text": "Hold up mana for a counterspell or removal spell.",
+        "scores": { "Pace": 4, "Resource": 1, "Interact": 5, "Risk": 1, "Presence": 1, "Social": 3 }
+      },
+      {
+        "text": "Play a card that benefits all players to build goodwill.",
+        "scores": { "Pace": 3, "Resource": 2, "Interact": 1, "Risk": 3, "Presence": 2, "Social": 5 }
+      }
+    ]
+  },
+  {
+    "question": "How do you prefer to win the game?",
+    "answers": [
+      {
+        "text": "By overwhelming the board with a massive army of creatures.",
+        "scores": { "Pace": 2, "Resource": 3, "Interact": 1, "Risk": 3, "Presence": 5, "Social": 2 }
+      },
+      {
+        "text": "With a single, powerful attack from my commander.",
+        "scores": { "Pace": 2, "Resource": 2, "Interact": 2, "Risk": 4, "Presence": 5, "Social": 2 }
+      },
+      {
+        "text": "By assembling a clever, game-ending combo.",
+        "scores": { "Pace": 4, "Resource": 4, "Interact": 2, "Risk": 5, "Presence": 3, "Social": 2 }
+      },
+      {
+        "text": "By slowly grinding out value and outlasting my opponents.",
+        "scores": { "Pace": 5, "Resource": 3, "Interact": 4, "Risk": 1, "Presence": 2, "Social": 3 }
+      }
+    ]
+  },
+  {
+    "question": "A dangerous, game-winning spell is on the stack. What's in your hand?",
+    "answers": [
+      {
+        "text": "A counterspell. I'm always prepared for this.",
+        "scores": { "Pace": 4, "Resource": 2, "Interact": 5, "Risk": 1, "Presence": 2, "Social": 3 }
+      },
+      {
+        "text": "Nothing to stop it. My deck focuses on its own plan.",
+        "scores": { "Pace": 2, "Resource": 3, "Interact": 1, "Risk": 4, "Presence": 4, "Social": 2 }
+      },
+      {
+        "text": "A way to redirect the spell or copy it for my own benefit.",
+        "scores": { "Pace": 3, "Resource": 3, "Interact": 4, "Risk": 4, "Presence": 4, "Social": 4 }
+      },
+      {
+        "text": "I'll try to convince another player to deal with it.",
+        "scores": { "Pace": 4, "Resource": 2, "Interact": 2, "Risk": 2, "Presence": 2, "Social": 5 }
+      }
+    ]
+  },
+  {
+    "question": "What is your attitude towards risk?",
+    "answers": [
+      {
+        "text": "I prefer consistent, reliable strategies.",
+        "scores": { "Pace": 4, "Resource": 3, "Interact": 3, "Risk": 1, "Presence": 2, "Social": 3 }
+      },
+      {
+        "text": "I enjoy high-risk, high-reward plays that can win the game on the spot.",
+        "scores": { "Pace": 3, "Resource": 4, "Interact": 2, "Risk": 5, "Presence": 5, "Social": 2 }
+      },
+      {
+        "text": "A little bit of calculated risk is fine.",
+        "scores": { "Pace": 3, "Resource": 3, "Interact": 3, "Risk": 3, "Presence": 3, "Social": 3 }
+      },
+      {
+        "text": "I like to introduce chaos and randomness into the game.",
+        "scores": { "Pace": 3, "Resource": 3, "Interact": 3, "Risk": 5, "Presence": 5, "Social": 4 }
+      }
+    ]
+  },
+  {
+    "question": "How do you want your opponents to see you?",
+    "answers": [
+      {
+        "text": "As the primary threat that must be dealt with immediately.",
+        "scores": { "Pace": 2, "Resource": 4, "Interact": 2, "Risk": 4, "Presence": 5, "Social": 2 }
+      },
+      {
+        "text": "As a helpful ally and a kingmaker.",
+        "scores": { "Pace": 3, "Resource": 3, "Interact": 2, "Risk": 2, "Presence": 3, "Social": 5 }
+      },
+      {
+        "text": "As an enigma, whose plan is unclear until it's too late.",
+        "scores": { "Pace": 4, "Resource": 3, "Interact": 4, "Risk": 2, "Presence": 1, "Social": 3 }
+      },
+      {
+        "text": "As a nuisance that is difficult and annoying to attack.",
+        "scores": { "Pace": 4, "Resource": 2, "Interact": 4, "Risk": 2, "Presence": 2, "Social": 4 }
+      }
+    ]
+  }
+]

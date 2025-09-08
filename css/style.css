@@ -1,0 +1,149 @@
+/* General Body Styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Main Container */
+#quiz-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    overflow: hidden;
+}
+
+header {
+    background-color: #4a4a8a;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.8em;
+}
+
+main {
+    padding: 30px;
+}
+
+/* Introduction and Results Screen */
+#introduction, #results {
+    text-align: center;
+}
+
+#introduction h2, #results h2 {
+    margin-top: 0;
+    font-size: 1.5em;
+    color: #4a4a8a;
+}
+
+/* Buttons */
+.btn, #start-btn, #restart-btn {
+    background-color: #6a6aff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    margin-top: 10px;
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+}
+
+.btn:hover, #start-btn:hover, #restart-btn:hover {
+    background-color: #5a5ae0;
+}
+
+#start-btn, #restart-btn {
+    max-width: 200px; /* Give start/restart buttons a max width */
+}
+
+/* Quiz Content */
+#quiz-content h2 {
+    font-size: 1.4em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#answer-buttons {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* Progress Bar */
+#progress-container {
+    margin-bottom: 20px;
+}
+
+#progress-text {
+    text-align: center;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+#progress-bar-full {
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    height: 10px;
+    width: 100%;
+}
+
+#progress-bar-inner {
+    background-color: #6a6aff;
+    border-radius: 5px;
+    height: 100%;
+    width: 0%; /* Initial width */
+    transition: width 0.4s ease;
+}
+
+/* Results Display */
+#primary-archetype {
+    background-color: #f7f7ff;
+    border: 1px solid #dadaff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+#primary-archetype #primary-name {
+    font-size: 1.3em;
+    color: #4a4a8a;
+    margin: 0 0 10px 0;
+}
+
+#secondary-archetypes h3 {
+    font-size: 1.2em;
+    color: #4a4a8a;
+}
+
+#secondary-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#secondary-list li {
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 8px;
+}
+
+/* Utility Classes */
+.hidden {
+    display: none;
+}
