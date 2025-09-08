@@ -27,6 +27,14 @@ $(document).ready(function() {
         Presence: { left: 'Subtle', right: 'Flashy' },
         Social: { left: 'Independent', right: 'Diplomatic' }
     };
+    const TRAIT_DESCRIPTIONS = {
+        Pace: "Determines the speed of your strategy, from slow and deliberate to fast and aggressive.",
+        Risk: "Reflects your comfort with high-risk, high-reward plays versus safe and consistent ones.",
+        Interact: "Measures how much you engage with your opponents' game plans, either proactively or reactively.",
+        Resource: "Indicates your focus on mana efficiency and card advantage.",
+        Presence: "Describes the visibility and impact of your threats on the board.",
+        Social: "Shows how much you rely on diplomacy and table politics."
+    };
 
     // Fetch data and then initialize
     $.when(
@@ -229,7 +237,15 @@ $(document).ready(function() {
 
             const barHtml = `
                 <div class="trait-bar-row">
-                    <h4>${trait}</h4>
+                    <div class="trait-header">
+                        <h4>${trait}</h4>
+                        <div class="tooltip">
+                            <span class="tooltip-icon">?</span>
+                            <div class="tooltip-content">
+                                <p>${TRAIT_DESCRIPTIONS[trait]}</p>
+                            </div>
+                        </div>
+                    </div>
                     <div class="bar-track">
                         <div class="bar-trail" style="left: ${trailLeft}%; width: ${trailWidth}%;"></div>
                         <div class="bar-indicator" style="left: ${positionPercent}%;"></div>
