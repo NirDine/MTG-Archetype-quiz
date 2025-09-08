@@ -163,7 +163,6 @@ main {
 }
 
 .trait-bar-row h4 {
-    margin-bottom: 8px;
     font-size: 1.1em;
     font-weight: 600;
     text-align: center;
@@ -225,6 +224,7 @@ main {
     align-items: center;
     justify-content: center;
     gap: 8px; /* Space between title and icon */
+    margin-bottom: -15px;
 }
 
 .tooltip {
