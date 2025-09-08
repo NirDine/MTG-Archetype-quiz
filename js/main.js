@@ -215,10 +215,10 @@ $(document).ready(function() {
                 scales: {
                     r: {
                         angleLines: {
-                            color: '#ddd'
+                            display: false
                         },
                         grid: {
-                            color: '#ddd'
+                            display: false
                         },
                         pointLabels: {
                             font: {
@@ -227,10 +227,7 @@ $(document).ready(function() {
                             color: '#333'
                         },
                         ticks: {
-                            color: '#555',
-                            stepSize: 1,
-                            min: 1,
-                            max: 5
+                            display: false
                         }
                     }
                 },
