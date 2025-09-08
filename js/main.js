@@ -20,7 +20,7 @@ $(document).ready(function() {
     let maxPossibleScores = {}; // To hold max scores for normalization
     const TRAITS = ["Pace", "Risk", "Interact", "Resource", "Presence", "Social"];
     const TRAIT_LABELS = {
-        Pace: { left: 'Fast', right: 'Slow' },
+        Pace: { left: 'Slow', right: 'Fast' },
         Risk: { left: 'Safe', right: 'Swingy' },
         Interact: { left: 'Proactive', right: 'Reactive' },
         Resource: { left: 'Efficient', right: 'Greedy' },
