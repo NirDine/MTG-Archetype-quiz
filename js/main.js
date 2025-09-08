@@ -20,7 +20,7 @@ $(document).ready(function() {
     let currentQuestionIndex = 0;
     let userScores = {};
     let traitChart = null; // To hold the chart instance
-    let maxPossibleScores = {}; // To hold max scores for normalization
+    let scoreRanges = {}; // To hold min and max scores for normalization
 
     // Fetch data and then initialize
     $.when(
@@ -33,7 +33,7 @@ $(document).ready(function() {
         traitInfo = traitsData[0];
 
         traits = discoverTraits(archetypes, questions);
-        maxPossibleScores = calculateMaxScores(questions);
+        scoreRanges = calculateScoreRanges(questions);
 
         // Enable start button once data is loaded
         startBtn.prop('disabled', false).text('Start Quiz');
@@ -127,7 +127,7 @@ $(document).ready(function() {
     }
 
     function calculateResults() {
-        const normalizedPlayerScores = normalizeScores(userScores, maxPossibleScores);
+        const normalizedPlayerScores = normalizeScores(userScores, scoreRanges);
 
         const results = archetypes.map(archetype => {
             let sumOfSquares = 0;
@@ -170,7 +170,7 @@ $(document).ready(function() {
             secondaryList.append(`<li>${archetype.name}</li>`);
         });
 
-        const normalizedPlayerScores = normalizeScores(userScores, maxPossibleScores);
+        const normalizedPlayerScores = normalizeScores(userScores, scoreRanges);
         renderTraitChart(normalizedPlayerScores);
         renderTraitBars(normalizedPlayerScores);
     }
@@ -271,46 +271,65 @@ $(document).ready(function() {
         });
     }
 
-    function calculateMaxScores(allQuestions) {
-        const maxScores = {}; // Initialize as empty object
+    function calculateScoreRanges(allQuestions) {
+        const ranges = {};
+
+        // Initialize ranges for all traits
+        traits.forEach(trait => {
+            ranges[trait] = { min: 0, max: 0 };
+        });
 
         allQuestions.forEach(question => {
-            const questionMaxes = {};
+            const questionExtremes = {};
 
-            // Find the max score for each trait within this question
+            // Find the min and max score for each trait within this question
             question.answers.forEach(answer => {
                 for (const trait in answer.scores) {
-                    if (!questionMaxes[trait] || answer.scores[trait] > questionMaxes[trait]) {
-                        questionMaxes[trait] = answer.scores[trait];
+                    if (!questionExtremes[trait]) {
+                        questionExtremes[trait] = { min: 0, max: 0 };
+                    }
+                    const score = answer.scores[trait];
+                    if (score < questionExtremes[trait].min) {
+                        questionExtremes[trait].min = score;
+                    }
+                    if (score > questionExtremes[trait].max) {
+                        questionExtremes[trait].max = score;
                     }
                 }
             });
 
-            // Add the maxes from this question to the total max scores
-            for (const trait in questionMaxes) {
-                if (maxScores.hasOwnProperty(trait)) {
-                    maxScores[trait] += questionMaxes[trait];
-                } else {
-                    maxScores[trait] = questionMaxes[trait];
+            // Add the extremes from this question to the total ranges
+            for (const trait in questionExtremes) {
+                if (ranges.hasOwnProperty(trait)) {
+                    ranges[trait].min += questionExtremes[trait].min;
+                    ranges[trait].max += questionExtremes[trait].max;
                 }
             }
         });
 
-        return maxScores;
+        return ranges;
     }
 
-    function normalizeScores(scores, maxScores) {
+    function normalizeScores(scores, ranges) {
         const normalizedScores = {};
 
         for (const trait of traits) {
             const userScore = scores[trait] || 0;
-            const maxScore = maxScores[trait] || 0;
-            if (maxScore > 0) {
-                // Apply formula: Normalized Value = 1 + 4 * (Score / Max Trait Score)
-                normalizedScores[trait] = 1 + 4 * (userScore / maxScore);
-            } else {
-                // Avoid division by zero, default to base score of 1
-                normalizedScores[trait] = 1;
+            const range = ranges[trait];
+
+            if (!range || (range.max === 0 && range.min === 0)) {
+                normalizedScores[trait] = 3; // Default to center
+                continue;
+            }
+
+            if (userScore >= 0) {
+                const span = range.max;
+                const scaled = (span > 0) ? (userScore / span) * 2 : 0;
+                normalizedScores[trait] = 3 + scaled;
+            } else { // userScore < 0
+                const span = Math.abs(range.min);
+                const scaled = (span > 0) ? (userScore / span) * 2 : 0; // userScore is negative, so this will subtract
+                normalizedScores[trait] = 3 + scaled;
             }
         }
 
@@ -327,21 +346,21 @@ $(document).ready(function() {
     }
 
     function encodeScores(scores) {
-        // Pad with leading zero if needed to make each score 2 digits.
-        return traits.map(trait => String(scores[trait] || 0).padStart(2, '0')).join('');
+        return traits.map(trait => scores[trait] || 0).join('_');
     }
 
     function decodeScores(encodedString) {
         const decodedScores = {};
-        if (encodedString.length !== traits.length * 2) {
-            // Can't reliably decode if length doesn't match, could be old URL
-            console.error("Decoded string length doesn't match current trait count.");
-            throw new Error("Invalid encoded string length.");
+        const scoreParts = encodedString.split('_');
+
+        if (scoreParts.length !== traits.length) {
+            console.error("Decoded string parts count doesn't match current trait count.");
+            throw new Error("Invalid encoded string format.");
         }
+
         for (let i = 0; i < traits.length; i++) {
             const trait = traits[i];
-            const scoreStr = encodedString.substring(i * 2, (i * 2) + 2);
-            decodedScores[trait] = parseInt(scoreStr, 10);
+            decodedScores[trait] = parseInt(scoreParts[i], 10);
         }
         return decodedScores;
     }
@@ -386,8 +405,8 @@ $(document).ready(function() {
 
     function displayResultsFromScores() {
         // Ensure max scores are calculated if they haven't been
-        if (Object.keys(maxPossibleScores).length === 0) {
-            maxPossibleScores = calculateMaxScores(questions);
+        if (Object.keys(scoreRanges).length === 0) {
+            scoreRanges = calculateScoreRanges(questions);
         }
 
         if (traitChart) {
