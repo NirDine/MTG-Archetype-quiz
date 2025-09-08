@@ -48,18 +48,3 @@ The repository is organized as follows:
 -   `questions.json`: Contains all the questions for the quiz, along with the answers and their corresponding trait scores.
 -   `traits.json`: Provides metadata for each of the six traits, such as their descriptive labels (e.g., "Slow" vs. "Fast") and tooltips.
 
----
-
-<details>
-  <summary><strong>Current Project Questions</strong></summary>
-
-  This section is for tracking open questions and potential areas for improvement in the project.
-
-  - **Is the archetype matching algorithm accurate enough?**
-    - The current Euclidean distance model is a good start, but could it be improved with different weighting or a different algorithm?
-  - **Should we add more questions?**
-    - More questions could lead to a more nuanced result, but might also increase quiz fatigue. What's the sweet spot?
-  - **Are there any archetypes missing?**
-    - The current list is comprehensive, but the Commander landscape is always evolving. We should periodically review if new major archetypes need to be added.
-
-</details>
