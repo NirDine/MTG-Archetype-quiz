@@ -2,106 +2,91 @@
   {
     "question": "The game is in the early stages. What's your ideal opening play?",
     "answers": [
-      {
-        "text": "Play a mana accelerator to get ahead on resources.",
-        "scores": { "Pace": 2, "Resource": 2, "Interact": 1, "Risk": 2, "Presence": 2, "Social": 2 }
-      },
-      {
-        "text": "Play a small, efficient creature to start chipping away at life totals.",
-        "scores": { "Pace": 1, "Resource": 1, "Interact": 2, "Risk": 2, "Presence": 3, "Social": 2 }
-      },
-      {
-        "text": "Hold up mana for a counterspell or removal spell.",
-        "scores": { "Pace": 4, "Resource": 1, "Interact": 5, "Risk": 1, "Presence": 1, "Social": 3 }
-      },
-      {
-        "text": "Play a card that benefits all players to build goodwill.",
-        "scores": { "Pace": 3, "Resource": 2, "Interact": 1, "Risk": 3, "Presence": 2, "Social": 5 }
-      }
+      { "text": "Play a mana accelerator to get ahead on resources.", "scores": { "Pace": 2, "Risk": 2, "Interact": 1, "Resource": 3, "Presence": 2, "Social": 2 } },
+      { "text": "Play a small, efficient creature to start chipping away at life totals.", "scores": { "Pace": 1, "Risk": 2, "Interact": 2, "Resource": 1, "Presence": 3, "Social": 2 } },
+      { "text": "Hold up mana for a counterspell or removal spell.", "scores": { "Pace": 4, "Risk": 1, "Interact": 5, "Resource": 1, "Presence": 1, "Social": 3 } },
+      { "text": "Play a card that benefits all players to build goodwill.", "scores": { "Pace": 3, "Risk": 3, "Interact": 1, "Resource": 2, "Presence": 2, "Social": 5 } }
     ]
   },
   {
     "question": "How do you prefer to win the game?",
     "answers": [
-      {
-        "text": "By overwhelming the board with a massive army of creatures.",
-        "scores": { "Pace": 2, "Resource": 3, "Interact": 1, "Risk": 3, "Presence": 5, "Social": 2 }
-      },
-      {
-        "text": "With a single, powerful attack from my commander.",
-        "scores": { "Pace": 2, "Resource": 2, "Interact": 2, "Risk": 4, "Presence": 5, "Social": 2 }
-      },
-      {
-        "text": "By assembling a clever, game-ending combo.",
-        "scores": { "Pace": 4, "Resource": 4, "Interact": 2, "Risk": 5, "Presence": 3, "Social": 2 }
-      },
-      {
-        "text": "By slowly grinding out value and outlasting my opponents.",
-        "scores": { "Pace": 5, "Resource": 3, "Interact": 4, "Risk": 1, "Presence": 2, "Social": 3 }
-      }
+      { "text": "By overwhelming the board with a massive army of creatures.", "scores": { "Pace": 2, "Risk": 3, "Interact": 1, "Resource": 3, "Presence": 5, "Social": 2 } },
+      { "text": "With a single, powerful attack from my commander.", "scores": { "Pace": 2, "Risk": 4, "Interact": 2, "Resource": 2, "Presence": 5, "Social": 2 } },
+      { "text": "By assembling a clever, game-ending combo.", "scores": { "Pace": 4, "Risk": 5, "Interact": 2, "Resource": 4, "Presence": 3, "Social": 2 } },
+      { "text": "By slowly grinding out value and outlasting my opponents.", "scores": { "Pace": 5, "Risk": 1, "Interact": 4, "Resource": 3, "Presence": 2, "Social": 3 } }
     ]
   },
   {
     "question": "A dangerous, game-winning spell is on the stack. What's in your hand?",
     "answers": [
-      {
-        "text": "A counterspell. I'm always prepared for this.",
-        "scores": { "Pace": 4, "Resource": 2, "Interact": 5, "Risk": 1, "Presence": 2, "Social": 3 }
-      },
-      {
-        "text": "Nothing to stop it. My deck focuses on its own plan.",
-        "scores": { "Pace": 2, "Resource": 3, "Interact": 1, "Risk": 4, "Presence": 4, "Social": 2 }
-      },
-      {
-        "text": "A way to redirect the spell or copy it for my own benefit.",
-        "scores": { "Pace": 3, "Resource": 3, "Interact": 4, "Risk": 4, "Presence": 4, "Social": 4 }
-      },
-      {
-        "text": "I'll try to convince another player to deal with it.",
-        "scores": { "Pace": 4, "Resource": 2, "Interact": 2, "Risk": 2, "Presence": 2, "Social": 5 }
-      }
+      { "text": "A counterspell. I'm always prepared for this.", "scores": { "Pace": 4, "Risk": 1, "Interact": 5, "Resource": 2, "Presence": 2, "Social": 3 } },
+      { "text": "Nothing to stop it. My deck focuses on its own plan.", "scores": { "Pace": 2, "Risk": 4, "Interact": 1, "Resource": 3, "Presence": 4, "Social": 2 } },
+      { "text": "A way to redirect the spell or copy it for my own benefit.", "scores": { "Pace": 3, "Risk": 4, "Interact": 4, "Resource": 3, "Presence": 4, "Social": 4 } },
+      { "text": "I'll try to convince another player to deal with it.", "scores": { "Pace": 4, "Risk": 2, "Interact": 2, "Resource": 2, "Presence": 2, "Social": 5 } }
     ]
   },
   {
     "question": "What is your attitude towards risk?",
     "answers": [
-      {
-        "text": "I prefer consistent, reliable strategies.",
-        "scores": { "Pace": 4, "Resource": 3, "Interact": 3, "Risk": 1, "Presence": 2, "Social": 3 }
-      },
-      {
-        "text": "I enjoy high-risk, high-reward plays that can win the game on the spot.",
-        "scores": { "Pace": 3, "Resource": 4, "Interact": 2, "Risk": 5, "Presence": 5, "Social": 2 }
-      },
-      {
-        "text": "A little bit of calculated risk is fine.",
-        "scores": { "Pace": 3, "Resource": 3, "Interact": 3, "Risk": 3, "Presence": 3, "Social": 3 }
-      },
-      {
-        "text": "I like to introduce chaos and randomness into the game.",
-        "scores": { "Pace": 3, "Resource": 3, "Interact": 3, "Risk": 5, "Presence": 5, "Social": 4 }
-      }
+      { "text": "I prefer consistent, reliable strategies.", "scores": { "Pace": 4, "Risk": 1, "Interact": 3, "Resource": 3, "Presence": 2, "Social": 3 } },
+      { "text": "I enjoy high-risk, high-reward plays that can win the game on the spot.", "scores": { "Pace": 3, "Risk": 5, "Interact": 2, "Resource": 4, "Presence": 5, "Social": 2 } },
+      { "text": "A little bit of calculated risk is fine.", "scores": { "Pace": 3, "Risk": 3, "Interact": 3, "Resource": 3, "Presence": 3, "Social": 3 } },
+      { "text": "I like to introduce chaos and randomness into the game.", "scores": { "Pace": 3, "Risk": 5, "Interact": 3, "Resource": 3, "Presence": 5, "Social": 4 } }
     ]
   },
   {
     "question": "How do you want your opponents to see you?",
     "answers": [
-      {
-        "text": "As the primary threat that must be dealt with immediately.",
-        "scores": { "Pace": 2, "Resource": 4, "Interact": 2, "Risk": 4, "Presence": 5, "Social": 2 }
-      },
-      {
-        "text": "As a helpful ally and a kingmaker.",
-        "scores": { "Pace": 3, "Resource": 3, "Interact": 2, "Risk": 2, "Presence": 3, "Social": 5 }
-      },
-      {
-        "text": "As an enigma, whose plan is unclear until it's too late.",
-        "scores": { "Pace": 4, "Resource": 3, "Interact": 4, "Risk": 2, "Presence": 1, "Social": 3 }
-      },
-      {
-        "text": "As a nuisance that is difficult and annoying to attack.",
-        "scores": { "Pace": 4, "Resource": 2, "Interact": 4, "Risk": 2, "Presence": 2, "Social": 4 }
-      }
+      { "text": "As the primary threat that must be dealt with immediately.", "scores": { "Pace": 2, "Risk": 4, "Interact": 2, "Resource": 4, "Presence": 5, "Social": 2 } },
+      { "text": "As a helpful ally and a kingmaker.", "scores": { "Pace": 3, "Risk": 2, "Interact": 2, "Resource": 3, "Presence": 3, "Social": 5 } },
+      { "text": "As an enigma, whose plan is unclear until it's too late.", "scores": { "Pace": 4, "Risk": 2, "Interact": 4, "Resource": 3, "Presence": 1, "Social": 3 } },
+      { "text": "As a nuisance that is difficult and annoying to attack.", "scores": { "Pace": 4, "Risk": 2, "Interact": 4, "Resource": 2, "Presence": 2, "Social": 4 } }
+    ]
+  },
+  {
+    "question": "How do you prefer to draw cards?",
+    "answers": [
+      { "text": "One big, explosive draw spell that refills my entire hand.", "scores": { "Pace": 3, "Risk": 5, "Interact": 1, "Resource": 4, "Presence": 4, "Social": 1 } },
+      { "text": "A steady, reliable engine that draws me an extra card each turn.", "scores": { "Pace": 4, "Risk": 1, "Interact": 2, "Resource": 3, "Presence": 2, "Social": 2 } },
+      { "text": "As a side effect of other actions, like creatures entering the battlefield.", "scores": { "Pace": 3, "Risk": 2, "Interact": 2, "Resource": 3, "Presence": 3, "Social": 2 } },
+      { "text": "By letting my opponents draw cards too, so no one gets jealous.", "scores": { "Pace": 3, "Risk": 2, "Interact": 1, "Resource": 2, "Presence": 1, "Social": 5 } }
+    ]
+  },
+  {
+    "question": "What board state scares you the most?",
+    "answers": [
+      { "text": "The player with a single, massive, indestructible creature.", "scores": { "Pace": 3, "Risk": 2, "Interact": 4, "Resource": 2, "Presence": 5, "Social": 1 } },
+      { "text": "The player with a huge army of small tokens.", "scores": { "Pace": 2, "Risk": 2, "Interact": 2, "Resource": 2, "Presence": 4, "Social": 1 } },
+      { "text": "The player with lots of open mana and a full hand of cards.", "scores": { "Pace": 4, "Risk": 4, "Interact": 5, "Resource": 3, "Presence": 3, "Social": 2 } },
+      { "text": "The player who is quietly setting up a board-locking enchantment.", "scores": { "Pace": 5, "Risk": 2, "Interact": 4, "Resource": 2, "Presence": 2, "Social": 2 } }
+    ]
+  },
+  {
+    "question": "Your board just got wiped. What's your next move?",
+    "answers": [
+      { "text": "It's fine, my best cards are in my graveyard anyway.", "scores": { "Pace": 3, "Risk": 3, "Interact": 2, "Resource": 4, "Presence": 3, "Social": 2 } },
+      { "text": "Immediately start playing small creatures to rebuild my presence.", "scores": { "Pace": 2, "Risk": 2, "Interact": 2, "Resource": 2, "Presence": 3, "Social": 2 } },
+      { "text": "Use politics and diplomacy to stay alive while I find my footing.", "scores": { "Pace": 4, "Risk": 2, "Interact": 2, "Resource": 1, "Presence": 1, "Social": 5 } },
+      { "text": "Unleash the giant, game-winning spell I was holding in my hand.", "scores": { "Pace": 3, "Risk": 4, "Interact": 1, "Resource": 5, "Presence": 5, "Social": 2 } }
+    ]
+  },
+  {
+    "question": "What is the most exciting part of building a new deck?",
+    "answers": [
+      { "text": "Finding a clever, unexpected combo that no one will see coming.", "scores": { "Pace": 4, "Risk": 5, "Interact": 2, "Resource": 3, "Presence": 4, "Social": 1 } },
+      { "text": "Perfecting the mana base and making the deck as consistent as possible.", "scores": { "Pace": 3, "Risk": 1, "Interact": 3, "Resource": 4, "Presence": 2, "Social": 2 } },
+      { "text": "Including my favorite 'pet' cards, even if they aren't the most powerful.", "scores": { "Pace": 3, "Risk": 3, "Interact": 2, "Resource": 2, "Presence": 2, "Social": 4 } },
+      { "text": "Finding the most powerful and efficient cards for every slot.", "scores": { "Pace": 3, "Risk": 2, "Interact": 4, "Resource": 5, "Presence": 4, "Social": 2 } }
+    ]
+  },
+  {
+    "question": "How do you feel about 'unfun' strategies like land destruction or stax?",
+    "answers": [
+      { "text": "All's fair in love and war. If it leads to a win, it's a valid strategy.", "scores": { "Pace": 3, "Risk": 3, "Interact": 4, "Resource": 2, "Presence": 3, "Social": 1 } },
+      { "text": "I try to avoid strategies that stop one player from being able to play.", "scores": { "Pace": 3, "Risk": 2, "Interact": 2, "Resource": 2, "Presence": 2, "Social": 5 } },
+      { "text": "I want the game to be a memorable, chaotic experience for everyone.", "scores": { "Pace": 2, "Risk": 5, "Interact": 3, "Resource": 3, "Presence": 5, "Social": 5 } },
+      { "text": "My goal is to assemble my engine, not to stop others from assembling theirs.", "scores": { "Pace": 3, "Risk": 2, "Interact": 1, "Resource": 3, "Presence": 4, "Social": 3 } }
     ]
   }
 ]
