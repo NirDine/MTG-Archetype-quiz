@@ -14,43 +14,49 @@ $(document).ready(function() {
     // State Variables
     let questions = [];
     let archetypes = [];
+    let traitInfo = {};
+    let traits = [];
     let shuffledQuestions = [];
     let currentQuestionIndex = 0;
     let userScores = {};
     let traitChart = null; // To hold the chart instance
     let maxPossibleScores = {}; // To hold max scores for normalization
-    const TRAITS = ["Pace", "Risk", "Interact", "Resource", "Presence", "Social"];
-    const TRAIT_LABELS = {
-        Pace: { left: 'Slow', right: 'Fast' },
-        Risk: { left: 'Safe', right: 'Swingy' },
-        Interact: { left: 'Proactive', right: 'Reactive' },
-        Resource: { left: 'Efficient', right: 'Greedy' },
-        Presence: { left: 'Subtle', right: 'Flashy' },
-        Social: { left: 'Independent', right: 'Diplomatic' }
-    };
-    const TRAIT_DESCRIPTIONS = {
-        Pace: "Determines the speed of your strategy, from slow and deliberate to fast and aggressive.",
-        Risk: "Reflects your comfort with high-risk, high-reward plays versus safe and consistent ones.",
-        Interact: "Measures how much you engage with your opponents' game plans, either proactively or reactively.",
-        Resource: "Indicates your focus on mana efficiency and card advantage.",
-        Presence: "Describes the visibility and impact of your threats on the board.",
-        Social: "Shows how much you rely on diplomacy and table politics."
-    };
 
     // Fetch data and then initialize
     $.when(
         $.getJSON('questions.json'),
-        $.getJSON('archetypes.json')
-    ).done(function(questionsData, archetypesData) {
+        $.getJSON('archetypes.json'),
+        $.getJSON('traits.json')
+    ).done(function(questionsData, archetypesData, traitsData) {
         questions = questionsData[0];
         archetypes = archetypesData[0];
+        traitInfo = traitsData[0];
+
+        traits = discoverTraits(archetypes, questions);
         maxPossibleScores = calculateMaxScores(questions);
+
         // Enable start button once data is loaded
         startBtn.prop('disabled', false).text('Start Quiz');
-    }).fail(function() {
+        // Check for shared results now that data is loaded
+        checkForSharedResults();
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        console.error("Failed to load JSON data:", textStatus, errorThrown);
         // Handle error if JSON files fail to load
         introduction.html('<h2>Oops!</h2><p>Could not load quiz data. Please try refreshing the page.</p>');
     });
+
+    function discoverTraits(archetypes, questions) {
+        const traitSet = new Set();
+        archetypes.forEach(archetype => {
+            Object.keys(archetype.fingerprint).forEach(trait => traitSet.add(trait));
+        });
+        questions.forEach(question => {
+            question.answers.forEach(answer => {
+                Object.keys(answer.scores).forEach(trait => traitSet.add(trait));
+            });
+        });
+        return Array.from(traitSet).sort();
+    }
 
     // Event Listeners
     startBtn.on('click', startQuiz);
@@ -69,7 +75,7 @@ $(document).ready(function() {
 
         // Reset state
         currentQuestionIndex = 0;
-        userScores = TRAITS.reduce((acc, trait) => ({ ...acc, [trait]: 0 }), {});
+        userScores = traits.reduce((acc, trait) => ({ ...acc, [trait]: 0 }), {});
         shuffledQuestions = shuffleArray([...questions]);
 
         showNextQuestion();
@@ -88,8 +94,6 @@ $(document).ready(function() {
                 answerButtons.append(button);
             });
         } else {
-            // End of quiz - transition to results
-            // This will be implemented in the next step
             endQuiz();
         }
     }
@@ -127,9 +131,10 @@ $(document).ready(function() {
 
         const results = archetypes.map(archetype => {
             let sumOfSquares = 0;
-            TRAITS.forEach(trait => {
-                const playerTraitScore = normalizedPlayerScores[trait];
-                const archetypeTraitScore = archetype.fingerprint[trait];
+            traits.forEach(trait => {
+                // Use 0 for missing traits in either player or archetype
+                const playerTraitScore = normalizedPlayerScores[trait] || 0;
+                const archetypeTraitScore = archetype.fingerprint[trait] || 0;
                 sumOfSquares += Math.pow(playerTraitScore - archetypeTraitScore, 2);
             });
             const distance = Math.sqrt(sumOfSquares);
@@ -173,10 +178,10 @@ $(document).ready(function() {
     function renderTraitChart(normalizedScores) {
         const ctx = document.getElementById('trait-chart').getContext('2d');
         const chartData = {
-            labels: TRAITS,
+            labels: traits,
             datasets: [{
                 label: 'Your Playstyle Scores',
-                data: TRAITS.map(trait => normalizedScores[trait]),
+                data: traits.map(trait => normalizedScores[trait] || 1),
                 backgroundColor: 'rgba(106, 106, 255, 0.2)',
                 borderColor: 'rgba(106, 106, 255, 1)',
                 borderWidth: 2,
@@ -222,12 +227,15 @@ $(document).ready(function() {
 
     function renderTraitBars(normalizedScores) {
         const container = $('#trait-bars-container');
-        container.find('.trait-bar-row').remove(); // Clear previous bars
+        container.empty(); // Clear previous bars more robustly
 
-        TRAITS.forEach(trait => {
-            const score = normalizedScores[trait];
+        traits.forEach(trait => {
+            const score = normalizedScores[trait] || 1; // Default to 1 if score is missing
             const positionPercent = (score - 1) / 4 * 100;
-            const labels = TRAIT_LABELS[trait];
+
+            const info = traitInfo[trait] || {};
+            const labels = info.labels || { left: 'Low', right: 'High' };
+            const description = info.description || 'No description available.';
 
             let trailLeft, trailWidth;
             if (positionPercent >= 50) {
@@ -245,7 +253,7 @@ $(document).ready(function() {
                         <div class="tooltip">
                             <span class="tooltip-icon">?</span>
                             <div class="tooltip-content">
-                                <p>${TRAIT_DESCRIPTIONS[trait]}</p>
+                                <p>${description}</p>
                             </div>
                         </div>
                     </div>
@@ -264,23 +272,27 @@ $(document).ready(function() {
     }
 
     function calculateMaxScores(allQuestions) {
-        const maxScores = TRAITS.reduce((acc, trait) => ({ ...acc, [trait]: 0 }), {});
+        const maxScores = {}; // Initialize as empty object
 
         allQuestions.forEach(question => {
-            const questionMaxes = TRAITS.reduce((acc, trait) => ({ ...acc, [trait]: 0 }), {});
+            const questionMaxes = {};
 
+            // Find the max score for each trait within this question
             question.answers.forEach(answer => {
                 for (const trait in answer.scores) {
-                    if (questionMaxes.hasOwnProperty(trait)) {
-                        if (answer.scores[trait] > questionMaxes[trait]) {
-                            questionMaxes[trait] = answer.scores[trait];
-                        }
+                    if (!questionMaxes[trait] || answer.scores[trait] > questionMaxes[trait]) {
+                        questionMaxes[trait] = answer.scores[trait];
                     }
                 }
             });
 
-            for (const trait in maxScores) {
-                maxScores[trait] += questionMaxes[trait];
+            // Add the maxes from this question to the total max scores
+            for (const trait in questionMaxes) {
+                if (maxScores.hasOwnProperty(trait)) {
+                    maxScores[trait] += questionMaxes[trait];
+                } else {
+                    maxScores[trait] = questionMaxes[trait];
+                }
             }
         });
 
@@ -290,10 +302,12 @@ $(document).ready(function() {
     function normalizeScores(scores, maxScores) {
         const normalizedScores = {};
 
-        for (const trait in scores) {
-            if (maxScores.hasOwnProperty(trait) && maxScores[trait] > 0) {
+        for (const trait of traits) {
+            const userScore = scores[trait] || 0;
+            const maxScore = maxScores[trait] || 0;
+            if (maxScore > 0) {
                 // Apply formula: Normalized Value = 1 + 4 * (Score / Max Trait Score)
-                normalizedScores[trait] = 1 + 4 * (scores[trait] / maxScores[trait]);
+                normalizedScores[trait] = 1 + 4 * (userScore / maxScore);
             } else {
                 // Avoid division by zero, default to base score of 1
                 normalizedScores[trait] = 1;
@@ -313,18 +327,19 @@ $(document).ready(function() {
     }
 
     function encodeScores(scores) {
-        // Assuming scores for each trait will be less than 100.
         // Pad with leading zero if needed to make each score 2 digits.
-        return TRAITS.map(trait => String(scores[trait]).padStart(2, '0')).join('');
+        return traits.map(trait => String(scores[trait] || 0).padStart(2, '0')).join('');
     }
 
     function decodeScores(encodedString) {
         const decodedScores = {};
-        if (encodedString.length !== TRAITS.length * 2) {
+        if (encodedString.length !== traits.length * 2) {
+            // Can't reliably decode if length doesn't match, could be old URL
+            console.error("Decoded string length doesn't match current trait count.");
             throw new Error("Invalid encoded string length.");
         }
-        for (let i = 0; i < TRAITS.length; i++) {
-            const trait = TRAITS[i];
+        for (let i = 0; i < traits.length; i++) {
+            const trait = traits[i];
             const scoreStr = encodedString.substring(i * 2, (i * 2) + 2);
             decodedScores[trait] = parseInt(scoreStr, 10);
         }
@@ -350,28 +365,21 @@ $(document).ready(function() {
     function checkForSharedResults() {
         const hash = window.location.hash;
         if (hash && hash.startsWith('#/results/')) {
+            // Can only process this after traits are discovered
+            if (traits.length === 0) {
+                console.log("Traits not discovered yet, deferring shared results check.");
+                return;
+            }
             const data = hash.substring('#/results/'.length);
             try {
                 userScores = decodeScores(data);
-
-                // We need to make sure archetype data is loaded before calculating
-                if (archetypes.length > 0) {
-                    displayResultsFromScores();
-                } else {
-                    // If archetypes aren't loaded yet, wait for them.
-                    // This relies on the initial $.when call
-                    $.when($.getJSON('archetypes.json')).done(function(archetypesData) {
-                        archetypes = archetypesData;
-                        displayResultsFromScores();
-                    });
-                }
+                displayResultsFromScores();
             } catch (e) {
                 console.error("Failed to parse shared results data:", e);
-                // Hide all content and show an error message
                 introduction.addClass('hidden');
                 quizContent.addClass('hidden');
                 resultsContent.addClass('hidden');
-                $('body').prepend('<div style="text-align: center; padding: 20px;"><h2>Invalid Share Link</h2><p>The link you followed seems to be broken. Please check the URL and try again.</p><a href="/">Go to Quiz</a></div>');
+                $('body').prepend('<div style="text-align: center; padding: 20px;"><h2>Invalid Share Link</h2><p>The link you followed seems to be broken or from a previous version of the quiz.</p><a href="/">Go to Quiz</a></div>');
             }
         }
     }
