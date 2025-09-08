@@ -18,23 +18,19 @@ $(document).ready(function() {
     let userScores = {};
     let traitChart = null; // To hold the chart instance
     let maxPossibleScores = {}; // To hold max scores for normalization
-    const TRAITS = ["Pace", "Risk", "Interact", "Resource", "Presence", "Social"];
-    const TRAIT_LABELS = {
-        Pace: { left: 'Slow', right: 'Fast' },
-        Risk: { left: 'Safe', right: 'Swingy' },
-        Interact: { left: 'Proactive', right: 'Reactive' },
-        Resource: { left: 'Efficient', right: 'Greedy' },
-        Presence: { left: 'Subtle', right: 'Flashy' },
-        Social: { left: 'Independent', right: 'Diplomatic' }
-    };
+    let TRAITS = [];
+    let TRAIT_LABELS = {};
 
     // Fetch data and then initialize
     $.when(
         $.getJSON('questions.json'),
-        $.getJSON('archetypes.json')
-    ).done(function(questionsData, archetypesData) {
+        $.getJSON('archetypes.json'),
+        $.getJSON('traits.json')
+    ).done(function(questionsData, archetypesData, traitsData) {
         questions = questionsData[0];
         archetypes = archetypesData[0];
+        TRAIT_LABELS = traitsData[0];
+        TRAITS = Object.keys(TRAIT_LABELS);
         maxPossibleScores = calculateMaxScores(questions);
         // Enable start button once data is loaded
         startBtn.prop('disabled', false).text('Start Quiz');

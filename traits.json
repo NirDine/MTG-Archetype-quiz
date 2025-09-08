@@ -1,0 +1,8 @@
+{
+    "Pace": { "left": "Slow", "right": "Fast" },
+    "Risk": { "left": "Safe", "right": "Swingy" },
+    "Interact": { "left": "Proactive", "right": "Reactive" },
+    "Resource": { "left": "Efficient", "right": "Greedy" },
+    "Presence": { "left": "Subtle", "right": "Flashy" },
+    "Social": { "left": "Independent", "right": "Diplomatic" }
+}
