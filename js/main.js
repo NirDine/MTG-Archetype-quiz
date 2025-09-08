@@ -218,7 +218,13 @@ $(document).ready(function() {
                             display: false
                         },
                         grid: {
-                            display: false
+                            color: function(context) {
+                                // Only display the outermost grid line
+                                if (context.tick.value === 5) {
+                                    return '#ddd'; // A light grey color for the outline
+                                }
+                                return 'transparent';
+                            }
                         },
                         pointLabels: {
                             font: {
@@ -227,7 +233,10 @@ $(document).ready(function() {
                             color: '#333'
                         },
                         ticks: {
-                            display: false
+                            display: false,
+                            min: 1,
+                            max: 5,
+                            stepSize: 1
                         }
                     }
                 },
