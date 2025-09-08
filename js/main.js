@@ -17,6 +17,7 @@ $(document).ready(function() {
     let currentQuestionIndex = 0;
     let userScores = {};
     let traitChart = null; // To hold the chart instance
+    let maxPossibleScores = {}; // To hold max scores for normalization
     const TRAITS = ["Pace", "Risk", "Interact", "Resource", "Presence", "Social"];
 
     // Fetch data and then initialize
@@ -26,6 +27,7 @@ $(document).ready(function() {
     ).done(function(questionsData, archetypesData) {
         questions = questionsData[0];
         archetypes = archetypesData[0];
+        maxPossibleScores = calculateMaxScores(questions);
         // Enable start button once data is loaded
         startBtn.prop('disabled', false).text('Start Quiz');
     }).fail(function() {
@@ -101,59 +103,104 @@ $(document).ready(function() {
         displayResults(sortedResults);
     }
 
+    function cosineSimilarity(vecA, vecB) {
+        let dotProduct = 0;
+        let magnitudeA = 0;
+        let magnitudeB = 0;
+
+        for (let i = 0; i < vecA.length; i++) {
+            dotProduct += vecA[i] * vecB[i];
+            magnitudeA += vecA[i] * vecA[i];
+            magnitudeB += vecB[i] * vecB[i];
+        }
+
+        magnitudeA = Math.sqrt(magnitudeA);
+        magnitudeB = Math.sqrt(magnitudeB);
+
+        if (magnitudeA === 0 || magnitudeB === 0) {
+            return 0; // Avoid division by zero
+        }
+
+        return dotProduct / (magnitudeA * magnitudeB);
+    }
+
     function calculateResults() {
+        const normalizedPlayerScores = normalizeScores(userScores, maxPossibleScores);
+        const playerVector = TRAITS.map(trait => normalizedPlayerScores[trait]);
+
         const results = archetypes.map(archetype => {
-            let sumOfSquares = 0;
-            TRAITS.forEach(trait => {
-                const userScore = userScores[trait];
-                const archetypeScore = archetype.fingerprint[trait];
-                sumOfSquares += Math.pow(userScore - archetypeScore, 2);
-            });
-            const distance = Math.sqrt(sumOfSquares);
+            const archetypeVector = TRAITS.map(trait => archetype.fingerprint[trait]);
+            const similarity = cosineSimilarity(playerVector, archetypeVector);
+
             return {
                 name: archetype.name,
-                score: distance,
+                // Convert similarity to percentage for easier handling later
+                score: similarity,
                 description: archetype.description
             };
         });
 
-        // Sort by score (distance) in ascending order
-        results.sort((a, b) => a.score - b.score);
+        // Sort by score (similarity) in descending order
+        results.sort((a, b) => b.score - a.score);
         return results;
     }
 
     function displayResults(sortedResults) {
         if (!sortedResults || sortedResults.length === 0) {
-            // Handle case where there are no results
             $('#primary-name').text("Could not determine archetype.");
             $('#primary-description').text("Please try the quiz again.");
             return;
         }
 
-        const primary = sortedResults[0];
-        const secondaries = sortedResults.slice(1, 4); // Get the next 3
+        const topScore = sortedResults[0].score;
+        // Check if the second score is at least 95% of the top score
+        const isTie = sortedResults.length > 1 && (sortedResults[1].score / topScore) >= 0.95;
 
-        // Display Primary Archetype
-        $('#primary-name').text(primary.name);
-        $('#primary-description').text(primary.description);
-
-        // Display Secondary Archetypes
+        const primaryNameEl = $('#primary-name');
+        const primaryDescriptionEl = $('#primary-description');
         const secondaryList = $('#secondary-list');
         secondaryList.empty();
-        secondaries.forEach(archetype => {
-            secondaryList.append(`<li>${archetype.name}</li>`);
-        });
+
+        if (isTie) {
+            const primary1 = sortedResults[0];
+            const primary2 = sortedResults[1];
+            // If there's a tie, the "secondary" list starts from the 3rd result
+            const secondaries = sortedResults.slice(2, 4);
+
+            primaryNameEl.html(`${primary1.name} & ${primary2.name}`);
+            primaryDescriptionEl.text("You have a hybrid playstyle, sharing traits from two distinct archetypes. You enjoy blending strategies and can adapt your approach depending on the game.");
+
+            // Show scores for the tied primary archetypes in the description or name
+            const tieDescription = `Your top matches are ${primary1.name} (${(primary1.score * 100).toFixed(0)}%) and ${primary2.name} (${(primary2.score * 100).toFixed(0)}%).`;
+            primaryDescriptionEl.append(`<br><br><em>${tieDescription}</em>`);
+
+            secondaries.forEach(archetype => {
+                secondaryList.append(`<li>${archetype.name} <span class="score">(${(archetype.score * 100).toFixed(0)}%)</span></li>`);
+            });
+
+        } else {
+            const primary = sortedResults[0];
+            const secondaries = sortedResults.slice(1, 4);
+
+            primaryNameEl.html(`${primary.name} <span class="score">(${(primary.score * 100).toFixed(0)}%)</span>`);
+            primaryDescriptionEl.text(primary.description);
+
+            secondaries.forEach(archetype => {
+                secondaryList.append(`<li>${archetype.name} <span class="score">(${(archetype.score * 100).toFixed(0)}%)</span></li>`);
+            });
+        }
 
         renderTraitChart(userScores);
     }
 
     function renderTraitChart(scores) {
+        const normalizedScores = normalizeScores(scores, maxPossibleScores);
         const ctx = document.getElementById('trait-chart').getContext('2d');
         const chartData = {
             labels: TRAITS,
             datasets: [{
                 label: 'Your Playstyle Scores',
-                data: TRAITS.map(trait => scores[trait]),
+                data: TRAITS.map(trait => normalizedScores[trait]),
                 backgroundColor: 'rgba(106, 106, 255, 0.2)',
                 borderColor: 'rgba(106, 106, 255, 1)',
                 borderWidth: 2,
@@ -180,11 +227,11 @@ $(document).ready(function() {
                             color: '#333'
                         },
                         ticks: {
-                            backdropColor: 'rgba(255, 255, 255, 0.75)',
                             color: '#555',
-                            stepSize: 5 // Adjust based on expected score ranges
-                        },
-                        suggestedMin: 0
+                            stepSize: 1,
+                            min: 1,
+                            max: 5
+                        }
                     }
                 },
                 plugins: {
@@ -194,6 +241,46 @@ $(document).ready(function() {
                 }
             }
         });
+    }
+
+    function calculateMaxScores(allQuestions) {
+        const maxScores = TRAITS.reduce((acc, trait) => ({ ...acc, [trait]: 0 }), {});
+
+        allQuestions.forEach(question => {
+            const questionMaxes = TRAITS.reduce((acc, trait) => ({ ...acc, [trait]: 0 }), {});
+
+            question.answers.forEach(answer => {
+                for (const trait in answer.scores) {
+                    if (questionMaxes.hasOwnProperty(trait)) {
+                        if (answer.scores[trait] > questionMaxes[trait]) {
+                            questionMaxes[trait] = answer.scores[trait];
+                        }
+                    }
+                }
+            });
+
+            for (const trait in maxScores) {
+                maxScores[trait] += questionMaxes[trait];
+            }
+        });
+
+        return maxScores;
+    }
+
+    function normalizeScores(scores, maxScores) {
+        const normalizedScores = {};
+
+        for (const trait in scores) {
+            if (maxScores.hasOwnProperty(trait) && maxScores[trait] > 0) {
+                // Apply formula: Normalized Value = 1 + 4 * (Score / Max Trait Score)
+                normalizedScores[trait] = 1 + 4 * (scores[trait] / maxScores[trait]);
+            } else {
+                // Avoid division by zero, default to base score of 1
+                normalizedScores[trait] = 1;
+            }
+        }
+
+        return normalizedScores;
     }
 
     // Fisher-Yates Shuffle Algorithm
