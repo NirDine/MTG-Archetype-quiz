@@ -129,29 +129,46 @@ $(document).ready(function() {
     function calculateResults() {
         const normalizedPlayerScores = normalizeScores(userScores, scoreRanges);
 
+        // Helper function for dot product of two vectors
+        const dotProduct = (vecA, vecB) => {
+            let product = 0;
+            for (let i = 0; i < vecA.length; i++) {
+                product += vecA[i] * vecB[i];
+            }
+            return product;
+        };
+
+        // Helper function for vector magnitude (length)
+        const magnitude = (vec) => {
+            return Math.sqrt(vec.reduce((sum, val) => sum + val * val, 0));
+        };
+
+        const playerVector = traits.map(trait => normalizedPlayerScores[trait] || 0);
+        const playerMagnitude = magnitude(playerVector);
+
         const results = archetypes.map(archetype => {
-            let sumOfSquares = 0;
-            traits.forEach(trait => {
-                const playerTraitScore = normalizedPlayerScores[trait] || 0;
-
-                // Normalize archetype fingerprint from 1-5 scale to -100 to 100 scale
-                // A score of 3 is neutral (0), 1 is min (-100), 5 is max (100).
+            const archetypeVector = traits.map(trait => {
                 const rawArchetypeScore = archetype.fingerprint[trait] || 3;
-                const normalizedArchetypeScore = (rawArchetypeScore - 3) * 50;
-
-                sumOfSquares += Math.pow(playerTraitScore - normalizedArchetypeScore, 2);
+                return (rawArchetypeScore - 3) * 50; // Normalize from 1-5 to -100-100
             });
-            const distance = Math.sqrt(sumOfSquares);
+
+            const archetypeMagnitude = magnitude(archetypeVector);
+
+            let similarity = 0;
+            // To avoid division by zero, only calculate if both vectors have non-zero length
+            if (playerMagnitude > 0 && archetypeMagnitude > 0) {
+                similarity = dotProduct(playerVector, archetypeVector) / (playerMagnitude * archetypeMagnitude);
+            }
 
             return {
                 name: archetype.name,
-                score: distance, // Lower distance is a better match
+                score: similarity, // Score is now similarity (higher is better)
                 description: archetype.description
             };
         });
 
-        // Sort by distance in ascending order
-        results.sort((a, b) => a.score - b.score);
+        // Sort by similarity score in DESCENDING order
+        results.sort((a, b) => b.score - a.score);
         return { sortedResults: results, normalizedPlayerScores: normalizedPlayerScores };
     }
 
