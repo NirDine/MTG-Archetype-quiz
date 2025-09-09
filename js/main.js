@@ -122,8 +122,8 @@ $(document).ready(function() {
         quizContent.addClass('hidden');
         resultsContent.removeClass('hidden');
 
-        const sortedResults = calculateResults();
-        displayResults(sortedResults);
+        const resultsData = calculateResults();
+        displayResults(resultsData.sortedResults, resultsData.normalizedPlayerScores);
     }
 
     function calculateResults() {
@@ -152,10 +152,10 @@ $(document).ready(function() {
 
         // Sort by distance in ascending order
         results.sort((a, b) => a.score - b.score);
-        return results;
+        return { sortedResults: results, normalizedPlayerScores: normalizedPlayerScores };
     }
 
-    function displayResults(sortedResults) {
+    function displayResults(sortedResults, normalizedPlayerScores) {
         if (!sortedResults || sortedResults.length === 0) {
             $('#primary-name').text("Could not determine archetype.");
             $('#primary-description').text("Please try the quiz again.");
@@ -174,7 +174,6 @@ $(document).ready(function() {
             secondaryList.append(`<li>${archetype.name}</li>`);
         });
 
-        const normalizedPlayerScores = normalizeScores(userScores, maxPossibleScores);
         renderTraitChart(normalizedPlayerScores);
         renderTraitBars(normalizedPlayerScores);
     }
@@ -391,7 +390,7 @@ $(document).ready(function() {
     }
 
     function displayResultsFromScores() {
-        // Ensure max scores are calculated if they haven't been
+        // Ensure score ranges are calculated if they haven't been
         if (Object.keys(scoreRanges).length === 0) {
             scoreRanges = calculateScoreRanges(questions, traits);
         }
@@ -400,8 +399,8 @@ $(document).ready(function() {
             traitChart.destroy();
         }
 
-        const sortedResults = calculateResults();
-        displayResults(sortedResults);
+        const resultsData = calculateResults();
+        displayResults(resultsData.sortedResults, resultsData.normalizedPlayerScores);
 
         // Show results and hide other sections
         introduction.addClass('hidden');
