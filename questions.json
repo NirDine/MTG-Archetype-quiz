@@ -45,15 +45,10 @@
     "question": "A dangerous spell is on the stack. What's in your hand?",
     "answers": [
       {
-<<<<<<< Updated upstream
-        "text": "A counterspell. I'm always ready for stuff like this",
-        "scores": { "Pace": -1, "Risk": -4, "Interact": 3, "Resource": -2, "Presence": -2, "Social": 0 }
-=======
         "text": "In response! I cast the instant I've been holding",
         "scores": { "Pace": -1, "Risk": -4, "Interact": 3, "Resource": -2, "Presence": -2, "Social": 0 },
         "skew": { "Control": 10 }
-        
->>>>>>> Stashed changes
+
       },
       {
         "text": "A bigger, badder spell. I'll just outmuscle whatever they've got",
