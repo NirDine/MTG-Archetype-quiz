@@ -20,7 +20,7 @@ $(document).ready(function() {
     let currentQuestionIndex = 0;
     let userScores = {};
     let traitChart = null; // To hold the chart instance
-    let maxPossibleScores = {}; // To hold max scores for normalization
+    let scoreRanges = {}; // To hold min/max scores for normalization
 
     // Fetch data and then initialize
     $.when(
@@ -33,7 +33,7 @@ $(document).ready(function() {
         traitInfo = traitsData[0];
 
         traits = discoverTraits(archetypes, questions);
-        maxPossibleScores = calculateMaxScores(questions);
+        scoreRanges = calculateScoreRanges(questions, traits);
 
         // Enable start button once data is loaded
         startBtn.prop('disabled', false).text('Start Quiz');
@@ -127,26 +127,30 @@ $(document).ready(function() {
     }
 
     function calculateResults() {
-        const normalizedPlayerScores = normalizeScores(userScores, maxPossibleScores);
+        const normalizedPlayerScores = normalizeScores(userScores, scoreRanges);
 
         const results = archetypes.map(archetype => {
             let sumOfSquares = 0;
             traits.forEach(trait => {
-                // Use 0 for missing traits in either player or archetype
                 const playerTraitScore = normalizedPlayerScores[trait] || 0;
-                const archetypeTraitScore = archetype.fingerprint[trait] || 0;
-                sumOfSquares += Math.pow(playerTraitScore - archetypeTraitScore, 2);
+
+                // Normalize archetype fingerprint from 1-5 scale to -100 to 100 scale
+                // A score of 3 is neutral (0), 1 is min (-100), 5 is max (100).
+                const rawArchetypeScore = archetype.fingerprint[trait] || 3;
+                const normalizedArchetypeScore = (rawArchetypeScore - 3) * 50;
+
+                sumOfSquares += Math.pow(playerTraitScore - normalizedArchetypeScore, 2);
             });
             const distance = Math.sqrt(sumOfSquares);
 
             return {
                 name: archetype.name,
-                score: distance, // Score is now distance
+                score: distance, // Lower distance is a better match
                 description: archetype.description
             };
         });
 
-        // Sort by score (distance) in ascending order (lower is better)
+        // Sort by distance in ascending order
         results.sort((a, b) => a.score - b.score);
         return results;
     }
@@ -181,7 +185,7 @@ $(document).ready(function() {
             labels: traits,
             datasets: [{
                 label: 'Your Playstyle Scores',
-                data: traits.map(trait => normalizedScores[trait] || 1),
+                data: traits.map(trait => normalizedScores[trait] || 0), // Default to 0 for neutral
                 backgroundColor: 'rgba(106, 106, 255, 0.2)',
                 borderColor: 'rgba(106, 106, 255, 1)',
                 borderWidth: 2,
@@ -195,30 +199,27 @@ $(document).ready(function() {
             options: {
                 scales: {
                     r: {
-                        angleLines: {
-                            display: true,
-                            color: '#ddd'
-                        },
-                        grid: {
-                            color: '#ddd'
-                        },
-                        pointLabels: {
-                            font: {
-                                size: 14
-                            },
-                            color: '#333'
-                        },
+                        angleLines: { display: true, color: '#ddd' },
+                        grid: { color: '#ddd' },
+                        pointLabels: { font: { size: 14 }, color: '#333' },
+                        min: -100,
+                        max: 100,
                         ticks: {
-                            display: false,
-                            min: 1,
-                            max: 5,
-                            stepSize: 4 // Creates grid lines at 1 and 5
+                            stepSize: 50,
+                            callback: function(value) {
+                                // Show labels for key points but not for every tick
+                                if (value === -100 || value === 0 || value === 100) {
+                                    return value;
+                                }
+                                return '';
+                            },
+                            backdropColor: 'rgba(255, 255, 255, 0.75)'
                         }
                     }
                 },
                 plugins: {
                     legend: {
-                        display: false // Hiding the legend as it's self-explanatory
+                        display: false
                     }
                 }
             }
@@ -230,8 +231,9 @@ $(document).ready(function() {
         container.empty(); // Clear previous bars more robustly
 
         traits.forEach(trait => {
-            const score = normalizedScores[trait] || 1; // Default to 1 if score is missing
-            const positionPercent = (score - 1) / 4 * 100;
+            const score = normalizedScores[trait] || 0; // Default to neutral 0
+            // Convert score from -100 to 100 range to 0% to 100% for the bar
+            const positionPercent = (score + 100) / 2;
 
             const info = traitInfo[trait] || {};
             const labels = info.labels || { left: 'Low', right: 'High' };
@@ -271,46 +273,50 @@ $(document).ready(function() {
         });
     }
 
-    function calculateMaxScores(allQuestions) {
-        const maxScores = {}; // Initialize as empty object
-
-        allQuestions.forEach(question => {
-            const questionMaxes = {};
-
-            // Find the max score for each trait within this question
-            question.answers.forEach(answer => {
-                for (const trait in answer.scores) {
-                    if (!questionMaxes[trait] || answer.scores[trait] > questionMaxes[trait]) {
-                        questionMaxes[trait] = answer.scores[trait];
-                    }
-                }
-            });
-
-            // Add the maxes from this question to the total max scores
-            for (const trait in questionMaxes) {
-                if (maxScores.hasOwnProperty(trait)) {
-                    maxScores[trait] += questionMaxes[trait];
-                } else {
-                    maxScores[trait] = questionMaxes[trait];
-                }
-            }
+    function calculateScoreRanges(allQuestions, allTraits) {
+        const ranges = {};
+        allTraits.forEach(trait => {
+            ranges[trait] = { min: 0, max: 0 };
         });
 
-        return maxScores;
+        allQuestions.forEach(question => {
+            allTraits.forEach(trait => {
+                const scoresForTrait = question.answers.map(a => a.scores[trait] || 0);
+                const minInQuestion = Math.min(...scoresForTrait);
+                const maxInQuestion = Math.max(...scoresForTrait);
+
+                ranges[trait].min += minInQuestion;
+                ranges[trait].max += maxInQuestion;
+            });
+        });
+
+        // Round to avoid floating point inaccuracies
+        for (const trait in ranges) {
+            ranges[trait].min = Math.round(ranges[trait].min * 100) / 100;
+            ranges[trait].max = Math.round(ranges[trait].max * 100) / 100;
+        }
+
+        return ranges;
     }
 
-    function normalizeScores(scores, maxScores) {
+    function normalizeScores(scores, ranges) {
         const normalizedScores = {};
 
         for (const trait of traits) {
-            const userScore = scores[trait] || 0;
-            const maxScore = maxScores[trait] || 0;
-            if (maxScore > 0) {
-                // Apply formula: Normalized Value = 1 + 4 * (Score / Max Trait Score)
-                normalizedScores[trait] = 1 + 4 * (userScore / maxScore);
+            const rawScore = scores[trait] || 0;
+            const range = ranges[trait];
+
+            if (range && (range.max - range.min) > 0) {
+                const S_min = range.min;
+                const S_max = range.max;
+
+                // Scale the raw score to a -100 to 100 range
+                const normalized = -100 + 200 * (rawScore - S_min) / (S_max - S_min);
+
+                normalizedScores[trait] = Math.round(normalized);
             } else {
-                // Avoid division by zero, default to base score of 1
-                normalizedScores[trait] = 1;
+                // If range is zero or invalid, the score is neutral
+                normalizedScores[trait] = 0;
             }
         }
 
@@ -386,8 +392,8 @@ $(document).ready(function() {
 
     function displayResultsFromScores() {
         // Ensure max scores are calculated if they haven't been
-        if (Object.keys(maxPossibleScores).length === 0) {
-            maxPossibleScores = calculateMaxScores(questions);
+        if (Object.keys(scoreRanges).length === 0) {
+            scoreRanges = calculateScoreRanges(questions, traits);
         }
 
         if (traitChart) {

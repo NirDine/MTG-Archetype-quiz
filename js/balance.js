@@ -10,78 +10,96 @@ $(document).ready(function() {
         traitInfo = traitsData[0];
         const traits = Object.keys(traitInfo);
 
-        const totalScores = calculateTotalScores(questions, traits);
-        renderBalanceBars(totalScores, traitInfo);
+        // --- Verification 1: Calculate and display Min/Max possible scores ---
+        const scoreRanges = calculateScoreRanges(questions, traits);
+        renderScoreRanges(scoreRanges, traitInfo);
+
+        // --- Verification 2: Check that each question's mean is ~0 ---
+        const questionAnalysis = analyzeQuestionMeans(questions, traits);
+        renderQuestionAnalysis(questionAnalysis);
+
     }).fail(function() {
-        $('#trait-bars-container').html('<p>Error: Could not load JSON data. Please make sure questions.json and traits.json are available.</p>');
+        $('#balance-container').html('<p>Error: Could not load JSON data.</p>');
     });
 
-    function calculateTotalScores(allQuestions, traits) {
-        const scores = traits.reduce((acc, trait) => ({ ...acc, [trait]: 0 }), {});
+    function calculateScoreRanges(allQuestions, allTraits) {
+        const ranges = {};
+        allTraits.forEach(trait => {
+            ranges[trait] = { min: 0, max: 0 };
+        });
 
         allQuestions.forEach(question => {
-            question.answers.forEach(answer => {
-                for (const trait in answer.scores) {
-                    if (scores.hasOwnProperty(trait)) {
-                        scores[trait] += answer.scores[trait];
-                    }
-                }
+            allTraits.forEach(trait => {
+                const scoresForTrait = question.answers.map(a => a.scores[trait] || 0);
+                const minInQuestion = Math.min(...scoresForTrait);
+                const maxInQuestion = Math.max(...scoresForTrait);
+
+                ranges[trait].min += minInQuestion;
+                ranges[trait].max += maxInQuestion;
             });
         });
 
-        return scores;
+        for (const trait in ranges) {
+            ranges[trait].min = Math.round(ranges[trait].min * 100) / 100;
+            ranges[trait].max = Math.round(ranges[trait].max * 100) / 100;
+        }
+        return ranges;
     }
 
-    function renderBalanceBars(scores, traitInfo) {
-        const container = $('#trait-bars-container');
-        const traits = Object.keys(scores).sort();
+    function analyzeQuestionMeans(allQuestions, allTraits) {
+        return allQuestions.map((question, index) => {
+            const means = {};
+            allTraits.forEach(trait => {
+                let sum = 0;
+                let count = 0;
+                question.answers.forEach(answer => {
+                    if (answer.scores.hasOwnProperty(trait)) {
+                        sum += answer.scores[trait];
+                        count++;
+                    }
+                });
+                means[trait] = count > 0 ? Math.round(sum / count * 1000) / 1000 : 0;
+            });
+            return {
+                question: `Q${index + 1}: ${question.question.substring(0, 30)}...`,
+                means: means
+            };
+        });
+    }
 
-        let content = '<h3>Trait Balance Analysis</h3>';
+    function renderScoreRanges(ranges, traitInfo) {
+        const container = $('#ranges-container');
+        let content = '<h3>Overall Trait Score Ranges (S_min to S_max)</h3>';
 
-        traits.forEach(trait => {
-            const rawScore = scores[trait];
-            // Define a max score for scaling. Let's use 50 as a reasonable default max.
-            // This means a score of +50 fills the bar right, and -50 fills it left.
-            const maxAbsScore = 50;
+        for (const trait in ranges) {
+            const range = ranges[trait];
+            content += `<div class="trait-range-row">
+                <h4>${trait}</h4>
+                <span>Min: <strong>${range.min}</strong></span>
+                <span>Max: <strong>${range.max}</strong></span>
+                <span>Width: <strong>${Math.round((range.max - range.min) * 100) / 100}</strong></span>
+            </div>`;
+        }
+        container.html(content);
+    }
 
-            // Calculate position: 0 score is 50%. Clamp to prevent overflow.
-            let positionPercent = 50 + (rawScore / maxAbsScore) * 50;
-            positionPercent = Math.max(0, Math.min(100, positionPercent));
+    function renderQuestionAnalysis(analysis) {
+        const container = $('#means-container');
+        let content = '<h3>Per-Question Trait Mean Analysis (Should be ~0)</h3>';
 
-            const info = traitInfo[trait] || {};
-            const labels = info.labels || { left: 'Low', right: 'High' };
-            const description = `Total Score: ${rawScore}. ${info.description || ''}`;
-
-            let trailLeft, trailWidth;
-            if (positionPercent >= 50) {
-                trailLeft = 50;
-                trailWidth = positionPercent - 50;
-            } else {
-                trailLeft = positionPercent;
-                trailWidth = 50 - positionPercent;
+        analysis.forEach(item => {
+            let meansContent = '<div class="means-list">';
+            for(const trait in item.means) {
+                const meanValue = item.means[trait];
+                const isZero = meanValue === 0;
+                meansContent += `<span class="mean-item ${isZero ? '' : 'non-zero'}">${trait}: ${meanValue}</span>`;
             }
+            meansContent += '</div>';
 
-            content += `
-                <div class="trait-bar-row">
-                    <div class="trait-header">
-                        <h4>${trait}</h4>
-                        <div class="tooltip">
-                            <span class="tooltip-icon">?</span>
-                            <div class="tooltip-content">
-                                <p>${description}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bar-track">
-                        <div class="bar-trail" style="left: ${trailLeft}%; width: ${trailWidth}%;"></div>
-                        <div class="bar-indicator" style="left: ${positionPercent}%;"></div>
-                    </div>
-                    <div class="bar-labels">
-                        <span class="label-left">${labels.left}</span>
-                        <span class="label-right">${labels.right}</span>
-                    </div>
-                </div>
-            `;
+            content += `<div class="question-analysis-row">
+                <p>${item.question}</p>
+                ${meansContent}
+            </div>`;
         });
         container.html(content);
     }
