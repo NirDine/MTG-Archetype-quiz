@@ -19,6 +19,7 @@ $(document).ready(function() {
     let shuffledQuestions = [];
     let currentQuestionIndex = 0;
     let userScores = {};
+    let userSkewScores = {}; // For the hybrid model
     let traitChart = null; // To hold the chart instance
     let scoreRanges = {}; // To hold min/max scores for normalization
 
@@ -76,6 +77,7 @@ $(document).ready(function() {
         // Reset state
         currentQuestionIndex = 0;
         userScores = traits.reduce((acc, trait) => ({ ...acc, [trait]: 0 }), {});
+        userSkewScores = {};
         shuffledQuestions = shuffleArray([...questions]);
 
         showNextQuestion();
@@ -91,6 +93,9 @@ $(document).ready(function() {
             question.answers.forEach(answer => {
                 const button = $('<button></button>').addClass('btn').text(answer.text);
                 button.data('scores', answer.scores);
+                if (answer.skew) {
+                    button.data('skew', answer.skew);
+                }
                 answerButtons.append(button);
             });
         } else {
@@ -105,6 +110,18 @@ $(document).ready(function() {
         for (const trait in selectedScores) {
             if (userScores.hasOwnProperty(trait)) {
                 userScores[trait] += selectedScores[trait];
+            }
+        }
+
+        // Add skew scores, if any
+        const selectedSkew = $(this).data('skew');
+        if (selectedSkew) {
+            for (const archetype in selectedSkew) {
+                if (userSkewScores.hasOwnProperty(archetype)) {
+                    userSkewScores[archetype] += selectedSkew[archetype];
+                } else {
+                    userSkewScores[archetype] = selectedSkew[archetype];
+                }
             }
         }
 
@@ -128,23 +145,46 @@ $(document).ready(function() {
 
     function calculateResults() {
         const normalizedPlayerScores = normalizeScores(userScores, scoreRanges);
+        const SKEW_WEIGHT = 0.05; // How much to nudge the vector per skew point
+
+        // --- Start of Hybrid Model Logic ---
+
+        // 1. Get the base user vector from trait scores
+        let baseUserVector = traits.map(trait => normalizedPlayerScores[trait] || 0);
+
+        // 2. Calculate the total skew vector
+        let totalSkewVector = traits.map(() => 0); // Initialize a zero vector
+        for (const archetypeName in userSkewScores) {
+            const skewValue = userSkewScores[archetypeName];
+            const targetArchetype = archetypes.find(a => a.name === archetypeName);
+
+            if (targetArchetype) {
+                // Get the trait vector for the archetype we are skewing towards
+                const targetArchetypeVector = traits.map(trait => {
+                    const rawScore = targetArchetype.fingerprint[trait] || 3;
+                    return (rawScore - 3) * 50; // Normalize from 1-5 to -100-100
+                });
+
+                // Add the weighted archetype vector to the total skew vector
+                for (let i = 0; i < traits.length; i++) {
+                    totalSkewVector[i] += targetArchetypeVector[i] * skewValue * SKEW_WEIGHT;
+                }
+            }
+        }
+
+        // 3. Create the final, skewed user vector
+        const finalUserVector = baseUserVector.map((val, i) => val + totalSkewVector[i]);
+
+        // --- End of Hybrid Model Logic ---
+
 
         // Helper function for dot product of two vectors
-        const dotProduct = (vecA, vecB) => {
-            let product = 0;
-            for (let i = 0; i < vecA.length; i++) {
-                product += vecA[i] * vecB[i];
-            }
-            return product;
-        };
+        const dotProduct = (vecA, vecB) => vecA.reduce((sum, val, i) => sum + val * vecB[i], 0);
 
         // Helper function for vector magnitude (length)
-        const magnitude = (vec) => {
-            return Math.sqrt(vec.reduce((sum, val) => sum + val * val, 0));
-        };
+        const magnitude = (vec) => Math.sqrt(vec.reduce((sum, val) => sum + val * val, 0));
 
-        const playerVector = traits.map(trait => normalizedPlayerScores[trait] || 0);
-        const playerMagnitude = magnitude(playerVector);
+        const playerMagnitude = magnitude(finalUserVector);
 
         const results = archetypes.map(archetype => {
             const archetypeVector = traits.map(trait => {
@@ -157,7 +197,7 @@ $(document).ready(function() {
             let similarity = 0;
             // To avoid division by zero, only calculate if both vectors have non-zero length
             if (playerMagnitude > 0 && archetypeMagnitude > 0) {
-                similarity = dotProduct(playerVector, archetypeVector) / (playerMagnitude * archetypeMagnitude);
+                similarity = dotProduct(finalUserVector, archetypeVector) / (playerMagnitude * archetypeMagnitude);
             }
 
             return {
@@ -169,6 +209,7 @@ $(document).ready(function() {
 
         // Sort by similarity score in DESCENDING order
         results.sort((a, b) => b.score - a.score);
+        // Note: We return the *original* normalized scores for display, not the skewed ones.
         return { sortedResults: results, normalizedPlayerScores: normalizedPlayerScores };
     }
 
