@@ -390,28 +390,60 @@ $(document).ready(function() {
         return array;
     }
 
-    function encodeScores(scores) {
-        // Pad with leading zero if needed to make each score 2 digits.
-        return traits.map(trait => String(scores[trait] || 0).padStart(2, '0')).join('');
+    function encodeResultData(traitScores, skewScores) {
+        // Create a comma-separated list of trait scores, in alphabetical order of traits
+        const traitString = traits.map(trait => traitScores[trait] || 0).join(',');
+
+        // Create a map of archetype names to their index for efficient lookup
+        const archetypeIndexMap = new Map(archetypes.map((arch, i) => [arch.name, i]));
+
+        // Create a comma-separated list of skew scores in the format "archetypeIndex:score"
+        const skewString = Object.entries(skewScores)
+            .map(([archName, score]) => {
+                if (archetypeIndexMap.has(archName)) {
+                    return `${archetypeIndexMap.get(archName)}:${score}`;
+                }
+                return null;
+            })
+            .filter(Boolean) // Remove any null entries for archetypes not found
+            .join(',');
+
+        // Combine the two strings with a pipe delimiter
+        const combinedString = `${traitString}|${skewString}`;
+        return encodeURIComponent(combinedString);
     }
 
-    function decodeScores(encodedString) {
-        const decodedScores = {};
-        if (encodedString.length !== traits.length * 2) {
-            // Can't reliably decode if length doesn't match, could be old URL
-            console.error("Decoded string length doesn't match current trait count.");
-            throw new Error("Invalid encoded string length.");
+    function decodeResultData(encodedString) {
+        try {
+            const decodedString = decodeURIComponent(encodedString);
+            const [traitString, skewString] = decodedString.split('|');
+
+            const newTraitScores = {};
+            const traitValues = traitString.split(',');
+            traits.forEach((trait, i) => {
+                newTraitScores[trait] = parseFloat(traitValues[i]) || 0;
+            });
+
+            const newSkewScores = {};
+            if (skewString) {
+                skewString.split(',').forEach(part => {
+                    const [archIndex, score] = part.split(':');
+                    const archName = archetypes[parseInt(archIndex, 10)]?.name;
+                    if (archName) {
+                        newSkewScores[archName] = parseInt(score, 10) || 0;
+                    }
+                });
+            }
+
+            return { traits: newTraitScores, skew: newSkewScores };
+        } catch (e) {
+            console.error("Failed to decode compact shared results data:", e);
+            throw e;
         }
-        for (let i = 0; i < traits.length; i++) {
-            const trait = traits[i];
-            const scoreStr = encodedString.substring(i * 2, (i * 2) + 2);
-            decodedScores[trait] = parseInt(scoreStr, 10);
-        }
-        return decodedScores;
     }
 
     function shareResults() {
-        const data = encodeScores(userScores);
+        const data = encodeResultData(userScores, userSkewScores);
         const url = window.location.origin + window.location.pathname + '#/results/' + data;
 
         navigator.clipboard.writeText(url).then(() => {
@@ -436,10 +468,12 @@ $(document).ready(function() {
             }
             const data = hash.substring('#/results/'.length);
             try {
-                userScores = decodeScores(data);
+                const decodedData = decodeResultData(data);
+                userScores = decodedData.traits;
+                userSkewScores = decodedData.skew;
                 displayResultsFromScores();
             } catch (e) {
-                console.error("Failed to parse shared results data:", e);
+                // Error is already logged by decodeResultData
                 introduction.addClass('hidden');
                 quizContent.addClass('hidden');
                 resultsContent.addClass('hidden');
