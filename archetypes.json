@@ -1,7 +1,7 @@
 [
   {
     "name": "Aggro / Go-Wide",
-    "fingerprint": { "Pace": 4, "Risk": 3, "Interact": 1, "Resource": 2, "Presence": 4, "Social": 2 },
+    "fingerprint": { "Pace": 5, "Risk": 2, "Interact": 1, "Resource": 2, "Presence": 4, "Social": 2 },
     "description": "You like to win by overwhelming the board with creatures. Your strategy is fast, proactive, and puts immense pressure on your opponents from the very beginning."
   },
   {

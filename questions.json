@@ -47,7 +47,7 @@
       {
         "text": "In response! I cast the instant I've been holding",
         "scores": { "Pace": -1, "Risk": -4, "Interact": 3, "Resource": -2, "Presence": -2, "Social": 0 },
-        "skew": { "Control": 10 }
+        "skew": { "Control": 2 }
 
       },
       {
