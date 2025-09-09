@@ -199,20 +199,21 @@ $(document).ready(function() {
                 scales: {
                     r: {
                         angleLines: { display: true, color: '#ddd' },
-                        grid: { color: '#ddd' },
+                        grid: {
+                            color: context => {
+                                // Only show the outermost grid line
+                                if (context.tick.value === 100) {
+                                    return '#ddd'; // Border color for the outer line
+                                }
+                                return 'transparent'; // No color for inner lines
+                            }
+                        },
                         pointLabels: { font: { size: 14 }, color: '#333' },
                         min: -100,
                         max: 100,
                         ticks: {
-                            stepSize: 50,
-                            callback: function(value) {
-                                // Show labels for key points but not for every tick
-                                if (value === -100 || value === 0 || value === 100) {
-                                    return value;
-                                }
-                                return '';
-                            },
-                            backdropColor: 'rgba(255, 255, 255, 0.75)'
+                            display: false, // Hide the numbered labels
+                            stepSize: 50
                         }
                     }
                 },
