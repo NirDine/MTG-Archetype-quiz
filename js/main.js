@@ -391,26 +391,53 @@ $(document).ready(function() {
     }
 
     function encodeResultData(traitScores, skewScores) {
-        const data = {
-            traits: traitScores,
-            skew: skewScores
-        };
-        const jsonString = JSON.stringify(data);
-        return btoa(jsonString); // Base64 encode the JSON string
+        // Create a comma-separated list of trait scores, in alphabetical order of traits
+        const traitString = traits.map(trait => traitScores[trait] || 0).join(',');
+
+        // Create a map of archetype names to their index for efficient lookup
+        const archetypeIndexMap = new Map(archetypes.map((arch, i) => [arch.name, i]));
+
+        // Create a comma-separated list of skew scores in the format "archetypeIndex:score"
+        const skewString = Object.entries(skewScores)
+            .map(([archName, score]) => {
+                if (archetypeIndexMap.has(archName)) {
+                    return `${archetypeIndexMap.get(archName)}:${score}`;
+                }
+                return null;
+            })
+            .filter(Boolean) // Remove any null entries for archetypes not found
+            .join(',');
+
+        // Combine the two strings with a pipe delimiter
+        const combinedString = `${traitString}|${skewString}`;
+        return encodeURIComponent(combinedString);
     }
 
     function decodeResultData(encodedString) {
         try {
-            const jsonString = atob(encodedString); // Decode Base64 string
-            const data = JSON.parse(jsonString);
-            // Basic validation to ensure we have an object with traits and skew properties
-            if (typeof data === 'object' && data !== null && data.hasOwnProperty('traits') && data.hasOwnProperty('skew')) {
-                return data;
+            const decodedString = decodeURIComponent(encodedString);
+            const [traitString, skewString] = decodedString.split('|');
+
+            const newTraitScores = {};
+            const traitValues = traitString.split(',');
+            traits.forEach((trait, i) => {
+                newTraitScores[trait] = parseFloat(traitValues[i]) || 0;
+            });
+
+            const newSkewScores = {};
+            if (skewString) {
+                skewString.split(',').forEach(part => {
+                    const [archIndex, score] = part.split(':');
+                    const archName = archetypes[parseInt(archIndex, 10)]?.name;
+                    if (archName) {
+                        newSkewScores[archName] = parseInt(score, 10) || 0;
+                    }
+                });
             }
-            throw new Error("Invalid data structure in shared link.");
+
+            return { traits: newTraitScores, skew: newSkewScores };
         } catch (e) {
-            console.error("Failed to decode or parse shared results data:", e);
-            // Return null or throw to indicate failure, allowing the caller to handle it.
+            console.error("Failed to decode compact shared results data:", e);
             throw e;
         }
     }
