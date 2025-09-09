@@ -88,5 +88,23 @@
       { "text": "I want the game to be a memorable, chaotic experience for everyone.", "scores": { "Pace": 4, "Risk": 5, "Interact": 3, "Resource": 3, "Presence": 5, "Social": 5 } },
       { "text": "My goal is to assemble my engine, not to stop others from assembling theirs.", "scores": { "Pace": 3, "Risk": 2, "Interact": 1, "Resource": 3, "Presence": 4, "Social": 3 } }
     ]
+  },
+  {
+    "question": "You're in a multiplayer game and one player is far ahead. What do you do?",
+    "answers": [
+      { "text": "Try to convince the other players to team up with me to take down the leader.", "scores": { "Pace": 2, "Risk": 2, "Interact": 5, "Resource": 2, "Presence": 1, "Social": 5 } },
+      { "text": "Focus on building up my own board, hoping my defenses will be enough to survive.", "scores": { "Pace": 4, "Risk": 3, "Interact": 1, "Resource": 4, "Presence": 4, "Social": 1 } },
+      { "text": "Look for a powerful spell that can single-handedly disrupt the leader's board, even if it sets me back too.", "scores": { "Pace": 2, "Risk": 5, "Interact": 5, "Resource": 3, "Presence": 2, "Social": 1 } },
+      { "text": "Secretly help the second-strongest player, hoping they can deal with the leader for me.", "scores": { "Pace": 2, "Risk": 3, "Interact": 4, "Resource": 2, "Presence": 1, "Social": 4 } }
+    ]
+  },
+  {
+    "question": "Which of these 'un-fun' cards is most acceptable to you?",
+    "answers": [
+      { "text": "A card that makes all players discard their hands. We're all in it together.", "scores": { "Pace": 3, "Risk": 4, "Interact": 4, "Resource": 1, "Presence": 1, "Social": 3 } },
+      { "text": "A card that prevents a specific action, like casting creature spells.", "scores": { "Pace": 2, "Risk": 2, "Interact": 5, "Resource": 2, "Presence": 2, "Social": 1 } },
+      { "text": "A card that punishes players for taking certain actions, like drawing cards.", "scores": { "Pace": 2, "Risk": 2, "Interact": 5, "Resource": 2, "Presence": 2, "Social": 1 } },
+      { "text": "I don't like any of them. I'd rather let everyone play their game.", "scores": { "Pace": 3, "Risk": 1, "Interact": 1, "Resource": 3, "Presence": 2, "Social": 5 } }
+    ]
   }
 ]
