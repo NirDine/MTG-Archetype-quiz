@@ -390,28 +390,33 @@ $(document).ready(function() {
         return array;
     }
 
-    function encodeScores(scores) {
-        // Pad with leading zero if needed to make each score 2 digits.
-        return traits.map(trait => String(scores[trait] || 0).padStart(2, '0')).join('');
+    function encodeResultData(traitScores, skewScores) {
+        const data = {
+            traits: traitScores,
+            skew: skewScores
+        };
+        const jsonString = JSON.stringify(data);
+        return btoa(jsonString); // Base64 encode the JSON string
     }
 
-    function decodeScores(encodedString) {
-        const decodedScores = {};
-        if (encodedString.length !== traits.length * 2) {
-            // Can't reliably decode if length doesn't match, could be old URL
-            console.error("Decoded string length doesn't match current trait count.");
-            throw new Error("Invalid encoded string length.");
+    function decodeResultData(encodedString) {
+        try {
+            const jsonString = atob(encodedString); // Decode Base64 string
+            const data = JSON.parse(jsonString);
+            // Basic validation to ensure we have an object with traits and skew properties
+            if (typeof data === 'object' && data !== null && data.hasOwnProperty('traits') && data.hasOwnProperty('skew')) {
+                return data;
+            }
+            throw new Error("Invalid data structure in shared link.");
+        } catch (e) {
+            console.error("Failed to decode or parse shared results data:", e);
+            // Return null or throw to indicate failure, allowing the caller to handle it.
+            throw e;
         }
-        for (let i = 0; i < traits.length; i++) {
-            const trait = traits[i];
-            const scoreStr = encodedString.substring(i * 2, (i * 2) + 2);
-            decodedScores[trait] = parseInt(scoreStr, 10);
-        }
-        return decodedScores;
     }
 
     function shareResults() {
-        const data = encodeScores(userScores);
+        const data = encodeResultData(userScores, userSkewScores);
         const url = window.location.origin + window.location.pathname + '#/results/' + data;
 
         navigator.clipboard.writeText(url).then(() => {
@@ -436,10 +441,12 @@ $(document).ready(function() {
             }
             const data = hash.substring('#/results/'.length);
             try {
-                userScores = decodeScores(data);
+                const decodedData = decodeResultData(data);
+                userScores = decodedData.traits;
+                userSkewScores = decodedData.skew;
                 displayResultsFromScores();
             } catch (e) {
-                console.error("Failed to parse shared results data:", e);
+                // Error is already logged by decodeResultData
                 introduction.addClass('hidden');
                 quizContent.addClass('hidden');
                 resultsContent.addClass('hidden');
