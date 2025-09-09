@@ -4,19 +4,19 @@
     "answers": [
       {
         "text": "A ramp piece to get ahead quickly",
-        "scores": { "Pace": 2, "Risk": -2, "Interact": -4, "Resource": 5, "Presence": 1, "Social": -2 }
+        "scores": { "Pace": 1, "Risk": -4, "Interact": -4, "Resource": 5, "Presence": 0, "Social": -3 }
       },
       {
         "text": "An efficient threat. Those life totals won't go down by themselves",
-        "scores": { "Pace": 5, "Risk": 3, "Interact": -4, "Resource": -2, "Presence": 4, "Social": 0 }
+        "scores": { "Pace": 3, "Risk": 0, "Interact": -2, "Resource": -2, "Presence": 4, "Social": 2 }
       },
       {
         "text": "A boardwipe. I want to be ready for whatever my opponents bring to the table",
-        "scores": { "Pace": -4, "Risk": -3, "Interact": 5, "Resource": -2, "Presence": -2, "Social": 2 }
+        "scores": { "Pace": -2, "Risk": -2, "Interact": 4, "Resource": -4, "Presence": -4, "Social": 0 }
       },
       {
         "text": "A wheel effect. If my opponents kept those hands, I don't want them to have those cards",
-        "scores": { "Pace": -2, "Risk": 5, "Interact": 2, "Resource": 2, "Presence": -3, "Social": 4 }
+        "scores": { "Pace": -2, "Risk": 2, "Interact": 0, "Resource": -2, "Presence": -2, "Social": 2 }
       }
     ]
   },
@@ -25,136 +25,134 @@
     "answers": [
       {
         "text": "With a massive army of creatures that no one could block",
-        "scores": { "Pace": 4, "Risk": 2, "Interact": -1, "Resource": 2, "Presence": 5, "Social": -2 }
+        "scores": { "Pace": 2, "Risk": 1, "Interact": -3, "Resource": -1, "Presence": 3, "Social": -2 }
       },
       {
         "text": "With a single, powerful attack from my commander",
-        "scores": { "Pace": 3, "Risk": 4, "Interact": 1, "Resource": 1, "Presence": 4, "Social": -3 }
+        "scores": { "Pace": 2, "Risk": 2, "Interact": 0, "Resource": 0, "Presence": 2, "Social": -1 }
       },
       {
         "text": "By assembling a clever, game-ending combo",
-        "scores": { "Pace": -2, "Risk": 5, "Interact": -2, "Resource": 4, "Presence": -3, "Social": -4 }
+        "scores": { "Pace": -1, "Risk": 0, "Interact": -1, "Resource": -2, "Presence": -4, "Social": -3 }
       },
       {
         "text": "By slowly grinding out value and outlasting my opponents",
-        "scores": { "Pace": -4, "Risk": -3, "Interact": 4, "Resource": 2, "Presence": -2, "Social": 3 }
+        "scores": { "Pace": -2, "Risk": -3, "Interact": 2, "Resource": 2, "Presence": -2, "Social": 0 }
       }
     ]
   },
   {
     "question": "A dangerous spell is on the stack. What's in your hand?",
     "answers": [
-      { 
+      {
         "text": "A counterspell. I'm always ready for stuff like this",
-        "scores": { "Pace": -2, "Risk": -3, "Interact": 5, "Resource": 1, "Presence": -1, "Social": 0 } 
+        "scores": { "Pace": -1, "Risk": -4, "Interact": 3, "Resource": -2, "Presence": -2, "Social": 0 }
       },
-      { 
+      {
         "text": "A bigger, badder spell. I'll just outmuscle whatever they've got",
-        "scores": { "Pace": 2, "Risk": 3, "Interact": -2, "Resource": -3, "Presence": 4, "Social": 1 } 
+        "scores": { "Pace": 1, "Risk": 3, "Interact": -5, "Resource": -1, "Presence": 2, "Social": 0 }
       },
-      { 
+      {
         "text": "A theft effect. That spell is basically mine already",
-        "scores": { "Pace": 0, "Risk": 1, "Interact": 4, "Resource": -1, "Presence": 2, "Social": 3 } 
+        "scores": { "Pace": 0, "Risk": 1, "Interact": 2, "Resource": 1, "Presence": -1, "Social": -2 }
       },
-      { 
+      {
         "text": "A handful of garbage. But I can always sweet-talk my way out of this",
-        "scores": { "Pace": -4, "Risk": 3, "Interact": 1, "Resource": -3, "Presence": -3, "Social": 5 } 
+        "scores": { "Pace": -2, "Risk": 0, "Interact": 0, "Resource": 0, "Presence": -2, "Social": 3 }
       }
     ]
   },
-{
-  "question": "Your opponent offers you a deal: If you don't kill them, they'll draw you some cards. What do you do?",
-  "answers": [
-    {
-      "text": "I accept the deal! Let them draw me some cards. I'm not in a rush",
-      "scores": { "Pace": -3, "Risk": 3, "Interact": 2, "Resource": 4, "Presence": -1, "Social": 4 }
-    },
-    {
-      "text": "No way! I’m not letting them live another turn",
-      "scores": { "Pace": 4, "Risk": -3, "Interact": -3, "Resource": -1, "Presence": 4, "Social": -2 }
-    },
-    {
-      "text": "I’ll negotiate: maybe they give me extra cards or a future favor",
-      "scores": { "Pace": 0, "Risk": 1, "Interact": 4, "Resource": 4, "Presence": 1, "Social": 5 }
-    },
-    {
-      "text": "I agree to those specific terms, then surprise them with a trick to take advantage",
-      "scores": { "Pace": 2, "Risk": 4, "Interact": 3, "Resource": 3, "Presence": 3, "Social": 2 }
-    }
+  {
+    "question": "Your opponent offers you a deal: If you don't kill them, they'll draw you some cards. What do you do?",
+    "answers": [
+      {
+        "text": "I accept the deal! Let them draw me some cards. I'm not in a rush",
+        "scores": { "Pace": -1, "Risk": 4, "Interact": 0, "Resource": 2, "Presence": -2, "Social": 2 }
+      },
+      {
+        "text": "No way! I’m not letting them live another turn",
+        "scores": { "Pace": 2, "Risk": -5, "Interact": -3, "Resource": -2, "Presence": 2, "Social": -3 }
+      },
+      {
+        "text": "I’ll negotiate: maybe they give me extra cards or a future favor",
+        "scores": { "Pace": 0, "Risk": 2, "Interact": 0, "Resource": 2, "Presence": 0, "Social": 3 }
+      },
+      {
+        "text": "I agree to those specific terms, then surprise them with a trick to take advantage",
+        "scores": { "Pace": 1, "Risk": -2, "Interact": 3, "Resource": 1, "Presence": 2, "Social": 1 }
+      }
   ]
-},
-{
-  "question": "Your hand is getting low on cards and you need to refill it. How do you go about it?",
-  "answers": [
-    { 
-      "text": "One big, explosive draw spell that refills my whole hand",
-      "scores": { "Pace": 3, "Risk": 4, "Interact": -2, "Resource": 5, "Presence": 2, "Social": 0 } 
-    },
-    { 
-      "text": "A steady, reliable engine that draws me an extra card each turn",
-      "scores": { "Pace": -1, "Risk": -2, "Interact": 0, "Resource": 3, "Presence": -1, "Social": 0 } 
-    },
-    { 
-      "text": "As a side effect of other actions, like creatures entering the battlefield",
-      "scores": { "Pace": 1, "Risk": 1, "Interact": 3, "Resource": 2, "Presence": 1, "Social": 0 } 
-    },
-    { 
-      "text": "By letting my opponents draw cards too. That way no one will stop me",
-      "scores": { "Pace": 0, "Risk": -1, "Interact": 5, "Resource": -1, "Presence": -2, "Social": 5 } 
-    }
+  },
+  {
+    "question": "Your hand is getting low on cards and you need to refill it. How do you go about it?",
+    "answers": [
+      {
+        "text": "One big, explosive draw spell that refills my whole hand",
+        "scores": { "Pace": 1, "Risk": 1, "Interact": -1, "Resource": 3, "Presence": 1, "Social": 0 }
+      },
+      {
+        "text": "A steady, reliable engine that draws me an extra card each turn",
+        "scores": { "Pace": 0, "Risk": -1, "Interact": 0, "Resource": 2, "Presence": -1, "Social": 0 }
+      },
+      {
+        "text": "As a side effect of other actions, like creatures entering the battlefield",
+        "scores": { "Pace": 0, "Risk": 0, "Interact": 2, "Resource": 1, "Presence": 1, "Social": 0 }
+      },
+      {
+        "text": "By letting my opponents draw cards too. That way no one will stop me",
+        "scores": { "Pace": -1, "Risk": 0, "Interact": 0, "Resource": -4, "Presence": -3, "Social": 2 }
+      }
   ]
-},
-{
-  "question": "Your opponents are ahead of you. How do you make it back into the game?",
-  "answers": [
-    { "text": "I play the big spell I've been saving since turn 1",
-      "scores": { "Pace": 5, "Risk": 3, "Interact": -2, "Resource": -1, "Presence": 5, "Social": -2 } 
-    },
-    { "text": "Pit my opponents against each other while I make my comeback",
-      "scores": { "Pace": 1, "Risk": 2, "Interact": 3, "Resource": 0, "Presence": 2, "Social": 5 } 
-    },
-    { "text": "Remove key pieces and protect my engines until I recover",
-      "scores": { "Pace": -3, "Risk": -2, "Interact": 4, "Resource": 4, "Presence": -1, "Social": 1 } 
-    },
-    { "text": "I'm sure I'll top deck an answer, eventually",
-      "scores": { "Pace": -5, "Risk": 5, "Interact": -1, "Resource": 2, "Presence": -2, "Social": 0 } 
-    }
+  },
+  {
+    "question": "Your opponents are ahead of you. How do you make it back into the game?",
+    "answers": [
+      { "text": "I play the big spell I've been saving since turn 1",
+        "scores": { "Pace": 3, "Risk": 1, "Interact": -1, "Resource": -3, "Presence": 3, "Social": -1 }
+      },
+      { "text": "Pit my opponents against each other while I make my comeback",
+        "scores": { "Pace": 0, "Risk": 1, "Interact": 1, "Resource": 0, "Presence": -1, "Social": 2 }
+      },
+      { "text": "Remove key pieces and protect my engines until I recover",
+        "scores": { "Pace": -2, "Risk": -1, "Interact": 4, "Resource": 2, "Presence": 0, "Social": 0 }
+      },
+      { "text": "I'm sure I'll top deck an answer, eventually",
+        "scores": { "Pace": -2, "Risk": 2, "Interact": -1, "Resource": -1, "Presence": -3, "Social": 1 }
+      }
   ]
-},
-
-{
-  "question": "A boardwipe hits the stack! What's your next move?",
-  "answers": [
-    { "text": "I've been saving a protection spell just for this",
-      "scores": { "Pace": -2, "Risk": 2, "Interact": 4, "Resource": 4, "Presence": 1, "Social": 0 } 
-    },
-    { "text": "Start rebuilding as soon as it resolves",
-      "scores": { "Pace": 2, "Risk": -1, "Interact": -3, "Resource": 2, "Presence": -1, "Social": 0 } 
-    },
-    { "text": "Make a deal with the player holding a counterspell",
-      "scores": { "Pace": 0, "Risk": 4, "Interact": 0, "Resource": -1, "Presence": 0, "Social": 5 } 
-    },
-    { "text": "Actually, I'm the one casting the boardwipe",
-      "scores": { "Pace": 3, "Risk": 0, "Interact": 3, "Resource": -2, "Presence": 5, "Social": -2 } 
-    }
+  },
+  {
+    "question": "A boardwipe hits the stack! What's your next move?",
+    "answers": [
+      { "text": "I've been saving a protection spell just for this",
+        "scores": { "Pace": -1, "Risk": 1, "Interact": 2, "Resource": 1, "Presence": 1, "Social": 0 }
+      },
+      { "text": "Start rebuilding as soon as it resolves",
+        "scores": { "Pace": 1, "Risk": -1, "Interact": -1, "Resource": 2, "Presence": 2, "Social": 0 }
+      },
+      { "text": "Make a deal with the player holding a counterspell",
+        "scores": { "Pace": 0, "Risk": 1, "Interact": 0, "Resource": -3, "Presence": -1, "Social": 2 }
+      },
+      { "text": "Actually, I'm the one casting the boardwipe",
+        "scores": { "Pace": 1, "Risk": 0, "Interact": 1, "Resource": -2, "Presence": 3, "Social": -2 }
+      }
   ]
-},
-  
-{
-  "question": "You're building a new deck. What do you spend the most time on?",
-  "answers": [
-    { "text": "Finding a clever, unexpected combo that no one will see coming",
-      "scores": { "Pace": -1, "Risk": 4, "Interact": -2, "Resource": 3, "Presence": 2, "Social": 0 } 
-    },
-    { "text": "Perfecting the mana base and making the deck as consistent as possible",
-      "scores": { "Pace": -2, "Risk": -2, "Interact": -1, "Resource": 5, "Presence": 1, "Social": 0 } 
-    },
-    { "text": "Including my favorite 'pet' cards, even if they aren't the most powerful",
-      "scores": { "Pace": 0, "Risk": 3, "Interact": 0, "Resource": -1, "Presence": 3, "Social": 0 } 
-    },
-    { "text": "Adding every staple card I can find, and then the rest",
-      "scores": { "Pace": 1, "Risk": -1, "Interact": 0, "Resource": 4, "Presence": 0, "Social": 0 } 
-    }
+  },
+  {
+    "question": "You're building a new deck. What do you spend the most time on?",
+    "answers": [
+      { "text": "Finding a clever, unexpected combo that no one will see coming",
+        "scores": { "Pace": -1, "Risk": 2, "Interact": -1, "Resource": 2, "Presence": 1, "Social": -1 }
+      },
+      { "text": "Perfecting the mana base and making the deck as consistent as possible",
+        "scores": { "Pace": -1, "Risk": -1, "Interact": -1, "Resource": 4, "Presence": 0, "Social": 0 }
+      },
+      { "text": "Including my favorite 'pet' cards, even if they aren't the most powerful",
+        "scores": { "Pace": 0, "Risk": 1, "Interact": 0, "Resource": -2, "Presence": 1, "Social": 0 }
+      },
+      { "text": "Adding every staple card I can find, and then the rest",
+        "scores": { "Pace": 1, "Risk": -1, "Interact": 0, "Resource": 1, "Presence": 0, "Social": -2 }
+      }
   ]
-}
+  }
 ]
